@@ -1,4 +1,11 @@
-import { getPythonPath, exec } from './utils';
+import exec from './exec';
+import { getPythonPath } from './pythonPath';
+
+
+interface PipPackage {
+    name: string;
+    version: string;
+}
 
 export async function installPackage(name: string, maxVersion?: string, extras: string[] = []): Promise<void> {
     let nameExtras = name;
@@ -19,4 +26,17 @@ export async function installPackages(names: string[], maxVersion?: string): Pro
 export async function uninstallPackage(...names: string[]): Promise<void> {
     const namesQuoted = names.map(x => `"${x}"`).join(' ');
     await exec(`${getPythonPath()} -m pip uninstall -y ${namesQuoted}`);
+}
+
+export async function listPackages(): Promise<PipPackage[]> {
+    const output = (await exec(`${getPythonPath()} -m pip freeze`)).stdout;
+    return (
+        output
+            .split(/\r?\n/)
+            .filter(x => x.includes('=='))
+            .map(x => ({
+                name: x.split('==')[0],
+                version: x.split('==')[1],
+            }))
+    );
 }

@@ -1,28 +1,62 @@
 {
 	"name": "boto3-ide",
-	"displayName": "boto3-ide",
-	"description": "AWS boto3 IDE",
-	"version": "1.0.0",
+	"version": "0.1.0",
+	"publisher": "Vlad Emelianov",
+	"displayName": "AWS boto3",
+	"description": "Code auto-complete and type checking for all boto3 services",
+	"license": "SEE LICENSE IN LICENSE",
+	"icon": "icon.png",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/vemel/boto3-ide"
+	},
+	"bugs": {
+		"url": "https://github.com/vemel/boto3-ide/issues",
+		"email": "vlad.emelianov.nz@gmail.com"
+	},
+	"author": {
+		"name": "Vlad Emelianov",
+		"email": "vlad.emelianov.nz@gmail.com"
+	},
 	"engines": {
 		"vscode": "^1.62.0"
 	},
 	"categories": [
+		"Programming Languages",
+		"Linters",
 		"Other"
+	],
+	"keywords": [
+		"boto3",
+		"botocore",
+		"type checking",
+		"auto-complete",
+		"pylance"
 	],
 	"activationEvents": [
 		"onCommand:boto3-ide.modify",
-		"onCommand:boto3-ide.update"
+		"onCommand:boto3-ide.update",
+		"onCommand:boto3-ide.docs",
+		"onCommand:boto3-ide.autodiscover"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
 				"command": "boto3-ide.modify",
-				"title": "AWS boto3 IDE: Add or remove boto3 services"
+				"title": "AWS boto3: Add or remove services"
 			},
 			{
 				"command": "boto3-ide.update",
-				"title": "AWS boto3 IDE: Update installed services"
+				"title": "AWS boto3: Update services"
+			},
+			{
+				"command": "boto3-ide.docs",
+				"title": "AWS boto3: Browse documentation"
+			},
+			{
+				"command": "boto3-ide.autodiscover",
+				"title": "AWS boto3: Auto-discover boto3 services in current project"
 			}
 		]
 	},
@@ -31,6 +65,7 @@
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
 		"pretest": "npm run compile && npm run lint",
+		"build": "vsce package",
 		"lint": "eslint src --ext ts",
 		"test": "node ./out/test/runTest.js"
 	},

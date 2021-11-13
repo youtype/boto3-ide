@@ -1,13 +1,14 @@
-import { window, Progress} from 'vscode';
-import { getPythonPath, exec } from './utils';
+import { window, Progress, workspace } from 'vscode';
 import { installPackage } from './pip';
+import { getPythonPath } from './pythonPath';
+import exec from './exec';
 
 
 
 export async function getBoto3Version(): Promise<string> {
     try {
         return (await exec(`${getPythonPath()} -c "import boto3; print(boto3.__version__)"`)).stdout;
-    } catch {
+    } catch (e) {
         return '';
     }
 }
@@ -20,7 +21,7 @@ export async function getOrInstallBoto3Version(progress: Progress<unknown>): Pro
     }
 
     const doInstall = await window.showErrorMessage(
-        'boto3 is not installed',
+        `boto3 is not installed in ${getPythonPath()}!`,
         'Install boto3'
     );
     if (!doInstall) { return ""; }

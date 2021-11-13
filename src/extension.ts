@@ -1,20 +1,24 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import updateHandler from './commands/update';
-import modifyServicesHandler from './commands/modify';
-import { getPythonPath } from './utils';
+import modifyHandler from './commands/modify';
+import docsHandler from './commands/docs';
+import autodiscoverHandler from './commands/autodiscover';
 
 export async function activate(context: vscode.ExtensionContext) {
-	console.log('Congratulations, your extension "boto3-ide" is now active!');
+	console.log('Congratulations, "boto3-ide" is now active!');
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('boto3-ide.modify', modifyServicesHandler)
+		vscode.commands.registerCommand('boto3-ide.modify', modifyHandler)
 	);
 	context.subscriptions.push(
 		vscode.commands.registerCommand('boto3-ide.update', updateHandler)
 	);
+	context.subscriptions.push(
+		vscode.commands.registerCommand('boto3-ide.docs', docsHandler)
+	);
+	context.subscriptions.push(
+		vscode.commands.registerCommand('boto3-ide.autodiscover', autodiscoverHandler)
+	);
 }
 
-// this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }

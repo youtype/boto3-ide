@@ -1,59 +1,40 @@
 import { window } from 'vscode';
-import { showProgress, getServicePackages, ServicePackageItem } from "../utils";
-import { installPackage, uninstallPackage } from '../pip';
+import { showProgress, getServicePackages, PypiPackageItem } from "../utils";
 import { getOrInstallBoto3Version } from '../boto3';
+import { resetPythonPath } from '../pythonPath';
+import modifyPackages from "../modifyPackages";
 
-export default async function modify(): Promise<void> {
-    showProgress("AWS boto3 IDE", async progress => {
+function getSuccessMessage(selected: readonly PypiPackageItem[]) {
+    if (!selected.length) {
+        return 'Boto3 code auto-complete and type checking disabled!';
+    }
+    const labels = selected.map(x => x.pypiPackage.getShortLabel());
+    if (selected.length === 1) {
+        return `Support enabled for ${labels[0]} service.`;
+    }
+    if (selected.length < 7) {
+        const lastLabel = labels.pop();
+        return `Support enabled for ${labels.join(', ')}, and ${lastLabel} services.`;
+    }
+
+    const lastLabels = labels.splice(5);
+    return `Support enabled for ${labels.join(', ')}, and ${lastLabels.length} more services.`;
+}
+
+export default async function handle(): Promise<void> {
+    resetPythonPath();
+    showProgress("AWS boto3", async progress => {
         const boto3Version = await getOrInstallBoto3Version(progress);
         if (!boto3Version) { return; }
 
-        const quickPick = window.createQuickPick<ServicePackageItem>();
+        const quickPick = window.createQuickPick<PypiPackageItem>();
         quickPick.placeholder = 'Select boto3 services';
         quickPick.canSelectMany = true;
         quickPick.busy = true;
         quickPick.show();
         progress.report({ message: "Please select boto3 services you need..." });
-    
-        const servicePackages = (await getServicePackages());
 
-        let pickedServicePackages = servicePackages.filter(x => x.installed);
-        if (!pickedServicePackages.length) {
-            pickedServicePackages = servicePackages.slice(0, 7);
-        }
-
-        quickPick.items = servicePackages.map(x => new ServicePackageItem(x, pickedServicePackages.includes(x)));
-        quickPick.selectedItems = quickPick.items.filter(x => x.picked);
-        quickPick.busy = false;
-
-        const selectedItems: readonly ServicePackageItem[] | null = await new Promise(resolve => {
-            quickPick.onDidHide(() => {
-                quickPick.hide();
-                resolve(null);
-            });
-            quickPick.onDidAccept(async () => {
-                quickPick.hide();
-                resolve(quickPick.selectedItems);
-            });
-        });
-
-        if (!selectedItems) { return; }
-
-        const itemsToInstall = quickPick.selectedItems.map(x => x.servicePackage).filter(x => !x.installed);
-        const itemsToUninstall = (
-            quickPick.items
-                .filter(x => !quickPick.selectedItems.includes(x))
-                .map(x => x.servicePackage)
-                .filter(x => x.installed)
-        );
-        for (const item of itemsToInstall) {
-            progress.report({ message: `Adding ${item.serviceName} service...` });
-            await installPackage(item.moduleName, boto3Version);
-        }
-        for (const item of itemsToUninstall) {
-            progress.report({ message: `Removing ${item.serviceName} service...` });
-            await uninstallPackage(item.moduleName);
-        }
-        window.showInformationMessage('Code auto-complete and type checking for boto3 installed successfully');
+        const servicePackages = await getServicePackages();
+        await modifyPackages(servicePackages, progress, boto3Version);
     });
 }

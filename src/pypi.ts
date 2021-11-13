@@ -1,5 +1,54 @@
 import * as https from 'https';
 
+export interface PypiPackage {
+    moduleName: string;
+    version: string;
+    installed: boolean;
+    recommended: boolean;
+
+    getShortLabel(): string;
+    getLabel(): string;
+    getDetail(): string;
+    getDescription(): string;
+    getExtraName(): string;
+    getDocsURL(): string;
+}
+
+export class Boto3StubsPackage implements PypiPackage {
+    moduleName: string;
+    version: string;
+    installed: boolean;
+    recommended: boolean;
+
+    constructor() {
+        this.moduleName = 'boto3-stubs';
+        this.version = '';
+        this.installed = false;
+        this.recommended = false;
+    }
+
+    getDescription(): string {
+        if (this.installed) { return '(installed)'; }
+        if (this.recommended) { return '(recommended)'; }
+        return '';
+    }
+    getDetail(): string {
+        return `boto3/botocore auto-complete and type annotations`;
+    }
+    getShortLabel(): string {
+        return 'boto3';
+    }
+    getLabel(): string {
+        return `boto3 common ${this.version}`;
+    }
+    getExtraName(): string {
+        return '';
+    }
+    getDocsURL(): string {
+        return 'https://vemel.github.io/boto3_stubs_docs/';
+    }
+}
+
 function getJSON(url: string): Promise<any> {
     return new Promise((resolve, reject) => {
         https.get(url, (res) => {

@@ -1,22 +1,8 @@
-import { workspace, window, ProgressLocation, Progress, QuickPickItem} from 'vscode';
-import { exec as _exec } from "child_process";
-import { promisify } from "util";
-import {servicePackages, ServicePackage} from './servicePaсkages';
-
-
-export const exec = promisify(_exec);
-
-export function getPythonPath(): string {
-    return workspace.getConfiguration('python').get('defaultInterpreterPath') || 'python';
-}
-
-export async function getBoto3Version(): Promise<string> {
-    try {
-        return (await exec(`${getPythonPath()} -c "import boto3; print(boto3.__version__)"`)).stdout;
-    } catch {
-        return '';
-    }
-}
+import { window, ProgressLocation, Progress, QuickPickItem } from 'vscode';
+import { servicePackages } from './servicePaсkages';
+import { Boto3StubsPackage, PypiPackage } from './pypi';
+import { getBoto3Version } from './boto3';
+import { listPackages } from './pip';
 
 export function showProgress(message: string, progressCallback: (progress: Progress<unknown>) => Promise<void>): void {
     window.withProgress({
@@ -29,31 +15,41 @@ export function showProgress(message: string, progressCallback: (progress: Progr
 }
 
 
-export async function getServicePackages(): Promise<ServicePackage[]> {
+export async function getServicePackages(): Promise<PypiPackage[]> {
     const boto3Version = await getBoto3Version();
-    const output = (await exec(`${getPythonPath()} -m pip freeze`)).stdout;
-    const installedPackagesData = output.split(/\r?\n/).filter(x => x.startsWith('mypy-boto3-')).map(x => ({
-        moduleName: x.split('==')[0],
-        version: x.split('==')[1],
-    }));
+    const installedPackages = await listPackages();
+
+    const masterPackage = new Boto3StubsPackage();
+    masterPackage.version = boto3Version;
+    const masterPackageData = installedPackages.find(x => x.name === masterPackage.moduleName);
+    if (masterPackageData) {
+        masterPackage.installed = true;
+        masterPackage.version = masterPackageData.version;
+    }
+
     servicePackages.forEach(sp => {
-        const installedPackage = installedPackagesData.find(x => x.moduleName === sp.moduleName);
+        const installedPackage = installedPackages.find(x => x.name === sp.moduleName);
         sp.installed = installedPackage ? true : false;
         sp.version = installedPackage ? installedPackage.version : boto3Version;
     });
     servicePackages.sort((a, b) => b.downloads - a.downloads);
     servicePackages.sort((a, b) => (b.installed ? 1 : 0) - (a.installed ? 1 : 0));
-    return servicePackages;
+    return [
+        masterPackage,
+        ...servicePackages,
+    ];
 }
 
-export class ServicePackageItem implements QuickPickItem {
+export class PypiPackageItem implements QuickPickItem {
     label: string;
+    description: string;
     detail: string;
     picked: boolean;
-	
-    constructor(public servicePackage: ServicePackage, picked: boolean) {
-        this.label = servicePackage.getLabel();
-        this.detail = servicePackage.getDescription();
+
+    constructor(public pypiPackage: PypiPackage, picked: boolean) {
+        this.label = pypiPackage.getLabel();
+        this.description = pypiPackage.getDescription();
+        this.detail = pypiPackage.getDetail();
         this.picked = picked;
-	}
+    }
 }

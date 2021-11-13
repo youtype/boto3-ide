@@ -34,6 +34,7 @@
 		"pylance"
 	],
 	"activationEvents": [
+		"onCommand:boto3-ide.quickstart",
 		"onCommand:boto3-ide.modify",
 		"onCommand:boto3-ide.update",
 		"onCommand:boto3-ide.docs",
@@ -42,6 +43,10 @@
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
+			{
+				"command": "boto3-ide.quickstart",
+				"title": "AWS boto3: Quick Start"
+			},
 			{
 				"command": "boto3-ide.modify",
 				"title": "AWS boto3: Add or remove services"

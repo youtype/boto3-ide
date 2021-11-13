@@ -13,8 +13,8 @@ export async function getBoto3Version(): Promise<string> {
     }
 }
 
-export async function getOrInstallBoto3Version(progress: Progress<unknown>): Promise<string> {
-    progress.report({ message: 'Getting boto3 version' });
+export async function getOrInstallBoto3Version(progress?: Progress<unknown>): Promise<string> {
+    if (progress) { progress.report({ message: 'Getting boto3 version' }); }
     const boto3Version = await getBoto3Version();
     if (boto3Version) {
         return boto3Version;
@@ -25,7 +25,7 @@ export async function getOrInstallBoto3Version(progress: Progress<unknown>): Pro
         'Install boto3'
     );
     if (!doInstall) { return ""; }
-    progress.report({ message: 'Installing boto3' });
+    if (progress) { progress.report({ message: 'Installing boto3' }); }
     await installPackage('boto3');
     return await getBoto3Version();
 }

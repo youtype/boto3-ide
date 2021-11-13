@@ -1,7 +1,6 @@
 import { showProgress, getServicePackages } from "../utils";
 import { workspace, Uri } from "vscode";
 import * as fs from "fs";
-import * as path from "path";
 import { resetPythonPath } from '../pythonPath';
 import { getOrInstallBoto3Version } from '../boto3';
 import modifyPackages from "../modifyPackages";

@@ -2,8 +2,13 @@
 
 All notable changes to the "boto3-ide" extension will be documented in this file.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
 ## [Unreleased]
+### Added
+- `pipenv` support
+
+### Fixed
+- `poetry` correctly removes master module if it is not needed
+
+## [0.1.0]
 
 - Initial release

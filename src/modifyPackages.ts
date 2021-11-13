@@ -1,7 +1,7 @@
-import { getServicePackages, PypiPackageItem } from "./utils";
+import { PypiPackageItem } from "./utils";
 import { window, Progress } from "vscode";
 
-import { installPackage, uninstallPackage } from './pip';
+import * as smart from './installers/smart';
 import { PypiPackage } from "./pypi";
 
 function getSuccessMessage(selected: readonly PypiPackageItem[]) {
@@ -35,33 +35,22 @@ export default async function modifyPackages(servicePackages: PypiPackage[], pro
     quickPick.selectedItems = quickPick.items.filter(x => x.picked);
     quickPick.busy = false;
 
-    const selectedItems: readonly PypiPackageItem[] | null = await new Promise(resolve => {
+    const selectedItems: PypiPackageItem[] | null = await new Promise(resolve => {
         quickPick.onDidHide(() => {
             resolve(null);
             quickPick.dispose();
         });
         quickPick.onDidAccept(async () => {
             const result = quickPick.selectedItems;
-            resolve(result);
+            resolve([...result]);
             quickPick.dispose();
         });
     });
 
     if (!selectedItems) { return; }
 
-    const itemsToInstall = quickPick.selectedItems.filter(x => !x.pypiPackage.installed);
-    const itemsToUninstall = (
-        quickPick.items
-            .filter(x => !quickPick.selectedItems.includes(x))
-            .filter(x => x.pypiPackage.installed)
-    );
-    for (const item of itemsToInstall) {
-        progress.report({ message: `Adding ${item.label}...` });
-        await installPackage(item.pypiPackage.moduleName, boto3Version);
-    }
-    for (const item of itemsToUninstall) {
-        progress.report({ message: `Removing ${item.label}...` });
-        await uninstallPackage(item.pypiPackage.moduleName);
-    }
-    window.showInformationMessage(getSuccessMessage(quickPick.selectedItems));
+    const selectedPackages = selectedItems.map(x => x.pypiPackage);
+    const removePackages = servicePackages.filter(x => x.installed).filter(x => !selectedPackages.includes(x));
+    await smart.install(selectedPackages, removePackages, boto3Version, progress);
+    window.showInformationMessage(getSuccessMessage(selectedItems));
 }

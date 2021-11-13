@@ -1,5 +1,5 @@
-import exec from './exec';
-import { getPythonPath } from './pythonPath';
+import exec from '../exec';
+import { getPythonPath } from '../pythonPath';
 
 
 interface PipPackage {
@@ -17,15 +17,8 @@ export async function installPackage(name: string, maxVersion?: string, extras: 
     await exec(`${getPythonPath()} -m pip install -U "${nameExtras}${versionConstraint}"`);
 }
 
-export async function installPackages(names: string[], maxVersion?: string): Promise<void> {
-    const versionConstraint = maxVersion ? `<=${maxVersion}` : '';
-    const namesJoined = names.map(name => `"${name}${versionConstraint}"`).join(' ');
-    await exec(`${getPythonPath()} -m pip install -U ${namesJoined}`);
-}
-
-export async function uninstallPackage(...names: string[]): Promise<void> {
-    const namesQuoted = names.map(x => `"${x}"`).join(' ');
-    await exec(`${getPythonPath()} -m pip uninstall -y ${namesQuoted}`);
+export async function uninstallPackage(name: string): Promise<void> {
+    await exec(`${getPythonPath()} -m pip uninstall -y ${name}`);
 }
 
 export async function listPackages(): Promise<PipPackage[]> {

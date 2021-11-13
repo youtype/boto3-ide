@@ -1,8 +1,7 @@
 import { showProgress, getServicePackages } from "../utils";
-import { installPackage } from '../pip';
-import { getOrInstallBoto3Version } from '../boto3';
+import * as smart from '../installers/smart';
+import { getOrInstallBoto3Version, updateBoto3Version } from '../boto3';
 import { getLatestBoto3Version } from '../pypi';
-import { window } from "vscode";
 import { resetPythonPath } from '../pythonPath';
 
 export default async function handle(): Promise<void> {
@@ -13,22 +12,13 @@ export default async function handle(): Promise<void> {
 
         const latestBoto3Version = await getLatestBoto3Version();
         if (latestBoto3Version !== boto3Version) {
-            progress.report({ message: 'Please update boto3 or dismiss...' });
-            const doInstall = await window.showInformationMessage(
-                `New boto3 version ${latestBoto3Version} available!`,
-                'Update now'
-            );
-            if (doInstall) {
-                progress.report({ message: `Updating boto3 to ${latestBoto3Version}...` });
-                await installPackage('boto3');
-                boto3Version = latestBoto3Version;
-            }
+            boto3Version = await updateBoto3Version(latestBoto3Version) || boto3Version;
         }
 
-        const extrasNames = (await getServicePackages()).filter(x => x.installed).filter(x => x.getExtraName()).map(x => x.getExtraName());
+        const servicePackages = await getServicePackages();
+        const installedPackages = servicePackages.filter(x => x.installed);
+        if (!installedPackages.length) { return; }
 
-        progress.report({ message: `Updating ${extrasNames.length} services to ${boto3Version}...` });
-        await installPackage('boto3-stubs', boto3Version, extrasNames);
-        window.showInformationMessage('All services are up to date');
+        await smart.install(installedPackages, [], boto3Version, progress);
     });
 }

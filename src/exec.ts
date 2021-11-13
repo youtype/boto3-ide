@@ -9,9 +9,14 @@ export default async function (cmd: string): Promise<{ stdout: string, stderr: s
         const { stderr, stdout } = await exec(cmd);
         return { stderr, stdout };
     } catch (e) {
-        console.error(e);
+        const error = (e as any);
+        console.error('error');
+        console.error(error.message);
+        console.error('stdout');
+        console.error(error.stdout);
+        console.error('stderr');
+        console.error(error.stderr);
         const message = (e as Error).message;
-        window.showErrorMessage(`${cmd} failed: ${message}`);
-        throw new Error(message);
+        throw new Error(`${cmd} failed: ${message}`);
     }
 }

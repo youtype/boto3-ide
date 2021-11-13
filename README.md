@@ -56,7 +56,6 @@ Select any installed service to see all generated types for easier type checking
 ## TODO
 
 - [ ] Auto-populate `boto3` services instead of hardcoding
-- [ ] Support `poetry`
 - [ ] Support `pipenv`
 
 ## Release Notes

@@ -40,7 +40,7 @@ export default async function handle(): Promise<void> {
         progress.report({ message: `Scanning workspace...` });
         const files = await findPythonFiles();
         progress.report({ message: `Scanning ${files.length} files...` });
-        const serviceNamesSet = new Set();
+        const serviceNamesSet: Set<string> = new Set();
         for (const file of files) {
             const data = fs.readFileSync(file.fsPath, { encoding: 'utf-8' });
             findAllServices(data).forEach(x => serviceNamesSet.add(x));
@@ -49,10 +49,7 @@ export default async function handle(): Promise<void> {
         console.log(serviceNames);
         progress.report({ message: `Found ${serviceNames.length} services in use...` });
 
-        const servicePackages = await getServicePackages();
-        servicePackages.forEach(x => {
-            x.recommended = serviceNames.includes(x.getExtraName());
-        });
+        const servicePackages = await getServicePackages(serviceNames);
         await modifyPackages(servicePackages, progress, boto3Version);
     });
 }

@@ -24,7 +24,7 @@ export class Boto3StubsPackage implements PypiPackage {
         this.moduleName = 'boto3-stubs';
         this.version = '';
         this.installed = false;
-        this.recommended = false;
+        this.recommended = true;
     }
 
     getDescription(): string {

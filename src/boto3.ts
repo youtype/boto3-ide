@@ -1,7 +1,8 @@
-import { window, Progress, workspace } from 'vscode';
-import { installPackage } from './pip';
+import { window, Progress } from 'vscode';
+import * as pip from './installers/pip';
 import { getPythonPath } from './pythonPath';
 import exec from './exec';
+import * as poetry from './installers/poetry';
 
 
 
@@ -20,12 +21,52 @@ export async function getOrInstallBoto3Version(progress?: Progress<unknown>): Pr
         return boto3Version;
     }
 
-    const doInstall = await window.showErrorMessage(
+    const actions = [
+        ...(poetry.isPresent() ? ['Install with Poetry'] : []),
+        'Install with Pip',
+    ];
+
+    const action = await window.showErrorMessage(
         `boto3 is not installed in ${getPythonPath()}!`,
-        'Install boto3'
+        ...actions,
     );
-    if (!doInstall) { return ""; }
-    if (progress) { progress.report({ message: 'Installing boto3' }); }
-    await installPackage('boto3');
+    if (!action) { return ""; }
+
+    if (action === 'Install with Poetry') {
+        if (progress) { progress.report({ message: 'Installing boto3 with Poetry' }); }
+        await poetry.installPackage('boto3', undefined, [], false);
+    }
+
+    if (action === 'Install with Pip') {
+        if (progress) { progress.report({ message: 'Installing boto3' }); }
+        await pip.installPackage('boto3');
+    }
+
     return await getBoto3Version();
+}
+
+
+export async function updateBoto3Version(version: string, progress?: Progress<unknown>): Promise<string> {
+    if (progress) { progress.report({ message: 'Please update boto3 or dismiss...' }); }
+    const actions = [
+        ...(poetry.isPresent() ? ['Update with Poetry'] : []),
+        'Update with Pip',
+    ];
+
+    const action = await window.showInformationMessage(
+        `New boto3 version ${version} available!`,
+        ...actions,
+    );
+    if (!action) { return ""; }
+
+    if (action === 'Update with Poetry') {
+        if (progress) { progress.report({ message: 'Updating boto3 with Poetry' }); }
+        await poetry.installPackage('boto3', version, [], false);
+    }
+
+    if (action === 'Install with Pip') {
+        if (progress) { progress.report({ message: 'Updating boto3' }); }
+        await pip.installPackage('boto3');
+    }
+    return version;
 }

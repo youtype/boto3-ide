@@ -28,7 +28,7 @@ async function findPythonFiles(): Promise<Uri[]> {
         "**/typings/**",
         "**/tests/**",
     ].join(',');
-    return workspace.findFiles('**/examples/*.py', `{${exclude}}`);
+    return workspace.findFiles('**/*.py', `{${exclude}}`);
 }
 
 export default async function handle(): Promise<void> {

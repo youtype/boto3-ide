@@ -1,5 +1,5 @@
 import { showProgress, getServicePackages } from "../utils";
-import * as smart from '../installers/smart';
+import SmartInstaller from '../installers/smart';
 import { getOrInstallBoto3Version, updateBoto3Version } from '../boto3';
 import { getLatestBoto3Version } from '../pypi';
 import { resetPythonPath } from '../pythonPath';
@@ -19,6 +19,6 @@ export default async function handle(): Promise<void> {
         const installedPackages = servicePackages.filter(x => x.installed);
         if (!installedPackages.length) { return; }
 
-        await smart.install(installedPackages, [], boto3Version, progress);
+        await new SmartInstaller(progress).installPackages(installedPackages, [], boto3Version, true);
     });
 }

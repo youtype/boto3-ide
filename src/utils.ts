@@ -1,8 +1,7 @@
 import { window, ProgressLocation, Progress, QuickPickItem } from 'vscode';
 import { servicePackages } from './servicePaсkages';
 import { Boto3StubsPackage, PypiPackage } from './pypi';
-import { getBoto3Version } from './boto3';
-import { listPackages } from './installers/pip';
+import SmartInstaller from './installers/smart';
 
 export function showProgress(message: string, progressCallback: (progress: Progress<unknown>) => Promise<void>): void {
     window.withProgress({
@@ -16,8 +15,9 @@ export function showProgress(message: string, progressCallback: (progress: Progr
 
 
 export async function getServicePackages(recommended: string[] = []): Promise<PypiPackage[]> {
-    const boto3Version = await getBoto3Version();
-    const installedPackages = await listPackages();
+    const smartInstaller = new SmartInstaller();
+    const boto3Version = await smartInstaller.getBoto3Version();
+    const installedPackages = await smartInstaller.pip.listPackages();
 
     const masterPackage = new Boto3StubsPackage();
     masterPackage.version = boto3Version;

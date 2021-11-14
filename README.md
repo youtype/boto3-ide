@@ -14,9 +14,8 @@
     - [Auto-discover services](#auto-discover-services)
     - [Browse documentation](#browse-documentation)
   - [Requirements](#requirements)
-  - [TODO](#todo)
+  - [1.0.0 roadmap](#100-roadmap)
   - [Release Notes](#release-notes)
-    - [0.1.0](#010)
 
 ## TLDR
 
@@ -53,13 +52,11 @@ Select any installed service to see all generated types for easier type checking
   for better auto-complete support
 - Set `python.analysis.typeCheckingMode` setting to `basic` to verify types with `Pylance` (optional)
 
-## TODO
+## 1.0.0 roadmap
 
-- [ ] Auto-populate `boto3` services instead of hardcoding
 - [ ] Support `pipenv`
+- [ ] Auto-populate `boto3` services instead of hardcoding
 
 ## Release Notes
 
-### 0.1.0
-
-Initial release.
+FUll release notes can be found in [CHANGELOG](./CHANGELOG.md).

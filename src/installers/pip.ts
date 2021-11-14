@@ -1,35 +1,14 @@
-import exec from '../exec';
-import { getPythonPath } from '../pythonPath';
+import { BaseInstaller } from './base';
 
 
-interface PipPackage {
-    name: string;
-    version: string;
-}
-
-export async function installPackage(name: string, maxVersion?: string, extras: string[] = []): Promise<void> {
-    let nameExtras = name;
-    if (extras.length) {
-        const extrasStr = extras.join(',');
-        nameExtras = `${nameExtras}[${extrasStr}]`;
+export default class PipInstaller extends BaseInstaller {
+    async installPackage(name: string, version: string, extras: string[], dev: boolean): Promise<void> {
+        const packageName = this.buildPackageName(name, extras);
+        const versionConstraint = version ? this.buildVersionConstraint(version) : '';
+        await this.exec(`${this.pythonPath} -m pip install -U "${packageName}${versionConstraint}"`);
     }
-    const versionConstraint = maxVersion ? `<=${maxVersion}` : '';
-    await exec(`${getPythonPath()} -m pip install -U "${nameExtras}${versionConstraint}"`);
-}
 
-export async function uninstallPackage(name: string): Promise<void> {
-    await exec(`${getPythonPath()} -m pip uninstall -y ${name}`);
-}
-
-export async function listPackages(): Promise<PipPackage[]> {
-    const output = (await exec(`${getPythonPath()} -m pip freeze`)).stdout;
-    return (
-        output
-            .split(/\r?\n/)
-            .filter(x => x.includes('=='))
-            .map(x => ({
-                name: x.split('==')[0],
-                version: x.split('==')[1],
-            }))
-    );
+    async removePackage(name: string, dev: boolean): Promise<void> {
+        await this.exec(`${this.pythonPath} -m pip uninstall -y ${name}`);
+    }
 }

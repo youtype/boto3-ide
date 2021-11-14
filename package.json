@@ -1,6 +1,6 @@
 {
 	"name": "boto3-ide",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"publisher": "Boto3typed",
 	"displayName": "AWS boto3",
 	"description": "Code auto-complete and type checking for all boto3 services",

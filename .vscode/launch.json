@@ -11,7 +11,7 @@
 			"request": "launch",
 			"args": [
 				"--extensionDevelopmentPath=${workspaceFolder}",
-				"${workspaceFolder}/../mypy_boto3_builder/",
+				"${workspaceFolder}/../pipenvproj/",
 			],
 			"outFiles": [
 				"${workspaceFolder}/out/**/*.js"

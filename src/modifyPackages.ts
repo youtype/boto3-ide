@@ -1,7 +1,7 @@
 import { PypiPackageItem } from "./utils";
 import { window, Progress } from "vscode";
 
-import * as smart from './installers/smart';
+import SmartInstaller from './installers/smart';
 import { PypiPackage } from "./pypi";
 
 function getSuccessMessage(selected: readonly PypiPackageItem[]) {
@@ -51,6 +51,6 @@ export default async function modifyPackages(servicePackages: PypiPackage[], pro
 
     const selectedPackages = selectedItems.map(x => x.pypiPackage);
     const removePackages = servicePackages.filter(x => x.installed).filter(x => !selectedPackages.includes(x));
-    await smart.install(selectedPackages, removePackages, boto3Version, progress);
+    await new SmartInstaller(progress).installPackages(selectedPackages, removePackages, boto3Version, true);
     window.showInformationMessage(getSuccessMessage(selectedItems));
 }

@@ -3,15 +3,16 @@
 
 [VSCode](https://code.visualstudio.com/) extension to enable code auto-complete and type checking for all [boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html) services.
 
+Supports [pip](https://pypi.org/project/pip/), [poetry](https://python-poetry.org/) and [pipenv](https://pypi.org/project/pipenv/) installers.
+
 ![boto3.typed](https://raw.githubusercontent.com/vemel/mypy_boto3_builder/master/logo.png)
 
 - [AWS boto3](#aws-boto3)
   - [TLDR](#tldr)
-  - [Features](#features)
     - [Quick Start](#quick-start)
+    - [Auto-discover services](#auto-discover-services)
     - [Add or remove services](#add-or-remove-services)
     - [Update services](#update-services)
-    - [Auto-discover services](#auto-discover-services)
     - [Browse documentation](#browse-documentation)
   - [Requirements](#requirements)
   - [1.0.0 roadmap](#100-roadmap)
@@ -21,11 +22,14 @@
 
 Install the extension and run `AWS boto3: Quick Start`.
 
-## Features
 
 ### Quick Start
 
 Setup code auto-complete and type checking in a new project.
+
+### Auto-discover services
+
+Find services you might need based on your project source code.
 
 ### Add or remove services
 
@@ -37,10 +41,6 @@ You can enable all services or only ones that are used in the current project.
 
 Check for updates with this command.
 Optionally updates `boto3`/`botocore`.
-
-### Auto-discover services
-
-Find services you might need based on your project source code.
 
 ### Browse documentation
 

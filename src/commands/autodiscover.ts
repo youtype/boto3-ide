@@ -46,7 +46,6 @@ export default async function handle(): Promise<void> {
             findAllServices(data).forEach(x => serviceNamesSet.add(x));
         }
         const serviceNames = [...serviceNamesSet];
-        console.log(serviceNames);
         progress.report({ message: `Found ${serviceNames.length} services in use...` });
 
         const servicePackages = await getServicePackages(serviceNames);

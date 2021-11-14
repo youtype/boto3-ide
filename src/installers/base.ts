@@ -1,7 +1,10 @@
 import exec from '../exec';
 import PipPackage from './pipPackage';
+import * as path from 'path';
+import * as fs from 'fs';
 
 export abstract class BaseInstaller {
+    abstract name: string;
     pythonPath: string;
     workDir: string;
 
@@ -20,12 +23,27 @@ export abstract class BaseInstaller {
         return new PipPackage(s.split('@')[0].trim(), '');
     }
 
+    getLockFileName(): string {
+        return '';
+    }
+
     isInUse(): boolean {
+        if (!this.lockFileExists()) { return false; }
+
+        const lockFileName = this.getLockFileName();
+        const lockFilePath = path.join(this.workDir, lockFileName);
+
+        const data = fs.readFileSync(lockFilePath, { encoding: 'utf-8' });
+        if (data.includes('"mypy-boto3')) { return true; }
+        if (data.includes('"boto3-stubs"')) { return true; }
         return false;
     }
 
     lockFileExists(): boolean {
-        return false;
+        const lockFileName = this.getLockFileName();
+        if (!lockFileName.length) { return false; }
+        const lockFilePath = path.join(this.workDir, lockFileName);
+        return fs.existsSync(lockFilePath);
     }
 
     buildVersionConstraint(version: string) {
@@ -41,7 +59,6 @@ export abstract class BaseInstaller {
 
     async listPackages(): Promise<PipPackage[]> {
         const output = (await exec(`${this.pythonPath} -m pip freeze`)).stdout;
-        console.log(output.split(/\r?\n/));
         return (
             output
                 .split(/\r?\n/)
@@ -50,7 +67,7 @@ export abstract class BaseInstaller {
     }
 
     async exec(cmd: string): Promise<{ stdout: string, stderr: string }> {
-        console.log(cmd);
+        console.log(`Exec: ${cmd}`);
         const oldCwd = process.cwd();
         process.chdir(this.workDir);
         const result = await exec(cmd);

@@ -1,6 +1,5 @@
 import { window, Progress } from 'vscode';
 import { getPythonPath } from './pythonPath';
-import exec from './exec';
 import SmartInstaller from './installers/smart';
 
 
@@ -14,7 +13,7 @@ export async function getOrInstallBoto3Version(progress?: Progress<unknown>): Pr
 
     const action = await window.showErrorMessage(
         `boto3 is not installed in ${getPythonPath()}!`,
-        `Install with ${smartInstaller.getInstallers().join(' / ')}`,
+        `Install with ${smartInstaller.getInstallers().map(x => x.name).join(' / ')}`,
     );
     if (!action) { return ""; }
 
@@ -32,7 +31,7 @@ export async function updateBoto3Version(version: string, progress?: Progress<un
     const smartInstaller = new SmartInstaller(progress);
     const action = await window.showInformationMessage(
         `New boto3 version ${version} available!`,
-        `Update with ${smartInstaller.getInstallers().join(' / ')}`,
+        `Update with ${smartInstaller.getInstallers().map(x => x.name).join(' / ')}`,
     );
     if (!action) { return ""; }
 

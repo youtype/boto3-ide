@@ -4,6 +4,8 @@ import { BaseInstaller } from './base';
 
 
 export default class PoetryInstaller extends BaseInstaller {
+    name = "poetry";
+
     async installPackage(name: string, version: string, extras: string[], dev: boolean): Promise<void> {
         const packageName = this.buildPackageName(name, extras);
         const versionConstraint = version ? this.buildVersionConstraint(version) : '@latest';
@@ -16,16 +18,7 @@ export default class PoetryInstaller extends BaseInstaller {
         await this.exec(cmd);
     }
 
-    isInUse(): boolean {
-        if (!this.lockFileExists()) { return false; }
-        const lockFilePath = path.join(this.workDir, 'poetry.lock');
-        const data = fs.readFileSync(lockFilePath, { encoding: 'utf-8' });
-        if (data.includes('"mypy-boto3')) { return true; }
-        if (data.includes('"boto3-stubs"')) { return true; }
-        return false;
-    }
-
-    lockFileExists(): boolean {
-        return fs.existsSync(path.join(this.workDir, 'poetry.lock'));
+    getLockFileName(): string {
+        return 'poetry.lock';
     }
 }

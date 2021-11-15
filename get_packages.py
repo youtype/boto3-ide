@@ -7,7 +7,7 @@ import time
 import sys
 from typing import Iterator
 
-API_URL = 'https://pypi.org/search/'
+DOCS_URL = 'https://vemel.github.io/boto3_stubs_docs/'
 JSON_URL = 'https://pypi.org/pypi/{}/json'
 PREFIX = 'mypy-boto3-'
 AUTHOR = "Vlad Emelianov"
@@ -29,23 +29,18 @@ class Package:
         return f"new ServicePackage('{self.name}', '{self.service_name}', {self.downloads}),"
 
 def iterate_packages() -> Iterator[Package]:
-    session = requests.Session()
-    package_names = []
-    for page in range(1, 50):
-        params = {'q': PREFIX, 'page': page}
-        r = session.get(API_URL, params=params)
-        soup = BeautifulSoup(r.text, 'html.parser')
-        for snippet in soup.select('a[class*="snippet"]'):
-            name: str = snippet.select_one('span[class*="name"]').text.strip() # type: ignore
-            description: str = snippet.select_one('p[class*="description"]').text.strip() # type: ignore
-            if not name.startswith(PREFIX) or name in package_names:
-                continue
-            if not description.startswith("Type annotations for boto3"):
-                continue
-            
+    r = requests.get(DOCS_URL)
+    soup = BeautifulSoup(r.text, 'html.parser')
+    for snippet in soup.select('a[href*="./mypy_boto3_"]'):
+        if not snippet.parent:
+            continue
+        docs_link = snippet.parent.select_one('a[href*="https://boto3."]')
+        if not docs_link:
+            continue
 
-            package_names.append(name)
-            yield Package(name=name, description=description)
+        name: str = snippet.text
+        description: str = docs_link.text
+        yield Package(name=name, description=description)
 
 
 def get_downloads(name: str) -> int:
@@ -61,10 +56,23 @@ def get_downloads(name: str) -> int:
     return json.loads(data)["data"]["last_month"]
 
 def main() -> None:
-    for package in iterate_packages():
+    output_path = sys.argv[1]
+    print(f"Writing to {output_path}...")
+    packages = []
+    for counter, package in enumerate(iterate_packages()):
         package.downloads = get_downloads(package.name)
+        packages.append(package)
+        print(f"Processed {counter}: {package.name} - {package.downloads} downloads")
 
-        print(package.print())
+    # packages.sort(key=lambda x: x.name)
+    packages.sort(key=lambda x: x.downloads, reverse=True)
+
+    with open(output_path, 'w') as f:
+        f.write('import { ServicePackage } from "./servicePackage";\n\n')
+        f.write("export const servicePackages: ServicePackage[] = [\n")
+        for package in packages:
+            f.write(f"    {package.print()}\n")
+        f.write("];\n")
 
 if __name__ == "__main__":
     main()

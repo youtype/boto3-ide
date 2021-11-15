@@ -1,5 +1,5 @@
 import { window, ProgressLocation, Progress, QuickPickItem } from 'vscode';
-import { servicePackages } from './servicePaсkages';
+import { servicePackages } from './servicePackages';
 import { Boto3StubsPackage, PypiPackage } from './pypi';
 import { createSmartInstaller } from './installers/smart';
 

@@ -9,6 +9,7 @@ All notable changes to the "boto3-ide" extension will be documented in this file
 - Removed useless progress bars
 - Installed `boto3` sometimes could not be discovered
 - Faster project source scanning
+- Support older VSCode releases
 
 ## [0.2.0]
 ### Added

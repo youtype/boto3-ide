@@ -1,8 +1,6 @@
-import { workspace } from 'vscode';
+import { workspace, extensions } from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
-
-let pythonPath = '';
 
 export function getWorkDir(): string {
     if (workspace.workspaceFolders?.length) {
@@ -21,22 +19,22 @@ function getNormalizedPath(current: string): string {
     return current;
 }
 
-export function resetPythonPath(): void {
-    pythonPath = '';
+export function getDefaultPythonPath(): string {
+    const newPath: string = workspace.getConfiguration('python').get('defaultInterpreterPath') || '';
+    if (newPath.length) { return getNormalizedPath(newPath); }
+
+    const oldPath: string = workspace.getConfiguration('python').get('pythonPath') || '';
+    if (oldPath.length) { return getNormalizedPath(oldPath); }
+
+    return "python";
 }
 
-export function getPythonPath(): string {
-    if (pythonPath.length) { return pythonPath; }
-    const oldPath: string = workspace.getConfiguration('python').get('pythonPath') || '';
-    if (oldPath.length) {
-        pythonPath = getNormalizedPath(oldPath);
-        return pythonPath;
+export async function getActivePythonPath(): Promise<string> {
+    const extension = extensions.getExtension('ms-python.python')!;
+    if (!extension.isActive) {
+        await extension.activate();
     }
-    const newPath: string = workspace.getConfiguration('python').get('defaultInterpreterPath') || '';
-    if (newPath.length) {
-        pythonPath = getNormalizedPath(newPath);
-        return pythonPath;
-    }
-    pythonPath = 'python';
-    return pythonPath;
+    const executionDetails = extension.exports.settings.getExecutionDetails();
+    if (!executionDetails?.execCommand.length) { return "python"; }
+    return executionDetails.execCommand[0];
 }

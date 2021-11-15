@@ -1,7 +1,7 @@
 import { PypiPackageItem } from "./utils";
-import { window, Progress } from "vscode";
+import { window } from "vscode";
 
-import SmartInstaller from './installers/smart';
+import { createSmartInstaller } from './installers/smart';
 import { PypiPackage } from "./pypi";
 
 function getSuccessMessage(selected: readonly PypiPackageItem[]) {
@@ -21,13 +21,12 @@ function getSuccessMessage(selected: readonly PypiPackageItem[]) {
     return `Support enabled for ${labels.join(', ')}, and ${lastLabels.length} more services.`;
 }
 
-export default async function modifyPackages(servicePackages: PypiPackage[], progress: Progress<unknown>, boto3Version: string) {
+export default async function modifyPackages(servicePackages: PypiPackage[], boto3Version: string) {
     const quickPick = window.createQuickPick<PypiPackageItem>();
     quickPick.placeholder = 'Select boto3 services';
     quickPick.canSelectMany = true;
     quickPick.busy = true;
     quickPick.show();
-    progress.report({ message: "Please select boto3 services you need..." });
 
     const pickedServicePackages = servicePackages.filter(x => x.installed || x.recommended);
 
@@ -51,6 +50,7 @@ export default async function modifyPackages(servicePackages: PypiPackage[], pro
 
     const selectedPackages = selectedItems.map(x => x.pypiPackage);
     const removePackages = servicePackages.filter(x => x.installed).filter(x => !selectedPackages.includes(x));
-    await new SmartInstaller(progress).installPackages(selectedPackages, removePackages, boto3Version, true);
+    const smartInstaller = await createSmartInstaller();
+    await smartInstaller.installPackages(selectedPackages, removePackages, boto3Version, true);
     window.showInformationMessage(getSuccessMessage(selectedItems));
 }

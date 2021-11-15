@@ -2,6 +2,14 @@
 
 All notable changes to the "boto3-ide" extension will be documented in this file.
 
+## [0.2.1]
+### Fixed
+- Get pythonPath from `Python` VSCode extension API
+- `poetry` and `pipenv` can be found outside of current python
+- Removed useless progress bars
+- Installed `boto3` sometimes could not be discovered
+- Faster project source scanning
+
 ## [0.2.0]
 ### Added
 - `pipenv` support

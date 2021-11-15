@@ -1,9 +1,7 @@
 import { getServicePackages, PypiPackageItem } from "../utils";
 import { window, env, Uri } from "vscode";
-import { resetPythonPath } from '../pythonPath';
 
 export default async function handle(): Promise<void> {
-    resetPythonPath();
     const quickPick = window.createQuickPick<PypiPackageItem>();
     quickPick.placeholder = 'Documentation will be opened in a browser';
     quickPick.busy = true;

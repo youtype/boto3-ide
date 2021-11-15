@@ -2,15 +2,44 @@ import exec from '../exec';
 import PipPackage from './pipPackage';
 import * as path from 'path';
 import * as fs from 'fs';
+import { workspace } from "vscode";
 
 export abstract class BaseInstaller {
     abstract name: string;
     pythonPath: string;
     workDir: string;
+    installerCmd: string;
 
     constructor(pythonPath: string, workDir: string) {
         this.pythonPath = pythonPath;
         this.workDir = workDir;
+        this.installerCmd = "";
+    }
+
+    async getInstallerCmd(): Promise<string> {
+        if (this.installerCmd) { return this.installerCmd; }
+        const commands: string[] = [
+            `${this.pythonPath} -m ${this.name}`,
+            workspace.getConfiguration('python').get('defaultInterpreterPath')
+                ? `${workspace.getConfiguration('python').get('defaultInterpreterPath')} -m ${this.name}`
+                : '',
+            workspace.getConfiguration('python').get('pythonPath')
+                ? `${workspace.getConfiguration('python').get('pythonPath')} -m ${this.name}`
+                : '',
+            workspace.getConfiguration('python').get(`${this.name}Path`) || ''
+        ];
+        for (const command of commands) {
+            if (!command) { continue; }
+            try {
+                await this.exec(command);
+                this.installerCmd = command;
+                return this.installerCmd;
+            } catch (e) {
+                console.log(`${command} - failed with ${e}`);
+            }
+        }
+        this.installerCmd = `python -m ${this.name}`;
+        return this.installerCmd;
     }
 
     parsePackageData(s: string): PipPackage {

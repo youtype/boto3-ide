@@ -1,31 +1,29 @@
 import PoetryInstaller from './poetry';
 import PipInstaller from './pip';
 import { PypiPackage } from '../pypi';
-import { Progress, window } from 'vscode';
-import { getPythonPath, getWorkDir } from '../pythonPath';
+import { window, extensions, workspace } from 'vscode';
 import PipPackage from './pipPackage';
 import PipenvInstaller from './pipenv';
 import { BaseInstaller } from './base';
+import { showProgress } from '../utils';
+import { getDefaultPythonPath } from '../pythonPath';
 
 
-
-export default class SmartInstaller {
+export class SmartInstaller {
     pythonPath: string;
     workDir: string;
     poetry: PoetryInstaller;
     pip: PipInstaller;
     pipenv: PipenvInstaller;
     installedPackages: PipPackage[];
-    progress: Progress<unknown> | undefined;
 
-    constructor(progress?: Progress<unknown>) {
-        this.pythonPath = getPythonPath();
+    constructor(pythonPath: string) {
+        this.pythonPath = pythonPath;
         this.workDir = getWorkDir();
         this.poetry = new PoetryInstaller(this.pythonPath, this.workDir);
         this.pip = new PipInstaller(this.pythonPath, this.workDir);
         this.pipenv = new PipenvInstaller(this.pythonPath, this.workDir);
         this.installedPackages = [];
-        this.progress = progress;
     }
 
     getInstallers(): BaseInstaller[] {
@@ -47,7 +45,6 @@ export default class SmartInstaller {
         if (!installers.length) { return undefined; }
         if (installers.length === 1) { return installers[0]; }
         const choices = installers.map(x => `Use ${x.name}`);
-        this.reportProgress('Choose installer...');
         const choice = await window.showInformationMessage(
             'Multiple installers detected, pick one',
             ...choices
@@ -59,43 +56,47 @@ export default class SmartInstaller {
     async installPackages(installPackages: PypiPackage[], removePackages: PypiPackage[], version: string, dev: boolean) {
         const installer = await this.getInstaller();
         if (!installer) { return; }
-        this.resetListPackages();
 
-        this.reportProgress(`Installing with ${installer.name}...`);
         await this._installPackages(installer, installPackages, removePackages, version, dev);
+        this.resetListPackages();
     }
 
     async install(name: string, version: string, dev: boolean = false) {
         const installer = await this.getInstaller();
         if (!installer) { return; }
+
+        await showProgress(
+            `Installing ${name} ${version} with ${installer.name}...`,
+            async () => {
+                await installer.installPackage(name, version, [], dev);
+            }
+        );
         this.resetListPackages();
-
-        this.reportProgress(`Installing ${name} ${version} with ${installer.name}...`);
-        return await installer.installPackage(name, version, [], dev);
-    }
-
-    reportProgress(message: string): void {
-        console.log(`Progress: ${message}`);
-        this.progress && this.progress.report({ message });
     }
 
     async _installPackages(installer: BaseInstaller, packages: PypiPackage[], removePackages: PypiPackage[], version: string, dev: boolean) {
         const masterPackage = packages.find(x => !x.getExtraName().length);
         const extraPackages = packages.filter(x => x.getExtraName());
-        if (masterPackage) {
-            this.reportProgress(`Installing ${extraPackages.length} services with ${installer.name}...`);
-            const extras = extraPackages.map(x => x.getExtraName());
-            await installer.installPackage(masterPackage.moduleName, version, extras, dev);
-        } else {
-            for (const extraPackage of extraPackages) {
-                this.reportProgress(`Installing ${extraPackage.getLabel()} service with ${installer.name}...`);
-                await installer.installPackage(extraPackage.moduleName, `<=${version}`, [], dev);
+
+        await showProgress(
+            `Installing packages...`,
+            async progress => {
+                if (masterPackage) {
+                    const extras = extraPackages.map(x => x.getExtraName());
+                    progress.report({ message: `Installing ${extraPackages.length} services with ${installer.name}...` });
+                    await installer.installPackage(masterPackage.moduleName, version, extras, dev);
+                } else {
+                    for (const extraPackage of extraPackages) {
+                        progress.report({ message: `Installing ${extraPackage.getLabel()} service with ${installer.name}...` });
+                        await installer.installPackage(extraPackage.moduleName, `<=${version}`, [], dev);
+                    }
+                }
+                for (const removePackage of removePackages) {
+                    progress.report({ message: `Removing ${removePackage.getLabel()} with ${installer.name}...` });
+                    await installer.removePackage(removePackage.moduleName, dev);
+                }
             }
-        }
-        for (const removePackage of removePackages) {
-            this.reportProgress(`Removing ${removePackage.getLabel()} service with ${installer.name}...`);
-            await installer.removePackage(removePackage.moduleName, dev);
-        }
+        );
     }
 
     async listPackages(): Promise<PipPackage[]> {
@@ -110,9 +111,35 @@ export default class SmartInstaller {
 
     async getBoto3Version(): Promise<string> {
         try {
-            return (await this.pip.exec(`${getPythonPath()} -c "import boto3; print(boto3.__version__)"`)).stdout;
+            return (await this.pip.exec(`${this.pythonPath} -c "import boto3; print(boto3.__version__)"`)).stdout.trim();
         } catch (e) {
-            return '';
+            console.error(e);
         }
+        return "";
     }
+}
+
+export function getWorkDir(): string {
+    if (workspace.workspaceFolders?.length) {
+        return workspace.workspaceFolders[0].uri.fsPath;
+    }
+    return process.cwd();
+}
+
+async function getPythonPath(): Promise<string> {
+    const extension = extensions.getExtension('ms-python.python')!;
+    if (!extension) {
+        window.showErrorMessage("Python extension is not installed!");
+        return "python";
+    }
+    if (!extension.isActive) {
+        await extension.activate();
+    }
+    const executionDetails = extension.exports.settings.getExecutionDetails();
+    if (!executionDetails?.execCommand.length) { return "python"; }
+    return executionDetails.execCommand[0];
+}
+
+export async function createSmartInstaller(): Promise<SmartInstaller> {
+    return new SmartInstaller(await getPythonPath());
 }

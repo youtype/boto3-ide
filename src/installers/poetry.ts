@@ -9,12 +9,14 @@ export default class PoetryInstaller extends BaseInstaller {
     async installPackage(name: string, version: string, extras: string[], dev: boolean): Promise<void> {
         const packageName = this.buildPackageName(name, extras);
         const versionConstraint = version ? this.buildVersionConstraint(version) : '@latest';
-        const cmd = `${this.pythonPath} -m poetry add -n ${dev ? '--dev' : ''} "${packageName}${versionConstraint}"`;
+        const installerCmd = await this.getInstallerCmd();
+        const cmd = `${installerCmd} add -n ${dev ? '--dev' : ''} "${packageName}${versionConstraint}"`;
         await this.exec(cmd);
     }
 
     async removePackage(name: string, dev: boolean): Promise<void> {
-        const cmd = `${this.pythonPath} -m poetry remove -n ${dev ? '--dev' : ''} "${name}"`;
+        const installerCmd = await this.getInstallerCmd();
+        const cmd = `${installerCmd} remove -n ${dev ? '--dev' : ''} "${name}"`;
         await this.exec(cmd);
     }
 

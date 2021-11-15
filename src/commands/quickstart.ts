@@ -1,6 +1,5 @@
 import { getServicePackages } from "../utils";
 import { workspace, Uri, window, env } from "vscode";
-import { resetPythonPath } from '../pythonPath';
 import { getOrInstallBoto3Version } from '../boto3';
 import modifyHandler from './modify';
 import updateHandler from './update';
@@ -8,7 +7,6 @@ import autodiscoverhandler from './autodiscover';
 
 
 export default async function handle(): Promise<void> {
-    resetPythonPath();
     const boto3Version = await getOrInstallBoto3Version();
     if (!boto3Version) { return; }
 

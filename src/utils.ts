@@ -1,21 +1,22 @@
 import { window, ProgressLocation, Progress, QuickPickItem } from 'vscode';
 import { servicePackages } from './servicePaсkages';
 import { Boto3StubsPackage, PypiPackage } from './pypi';
-import SmartInstaller from './installers/smart';
+import { createSmartInstaller } from './installers/smart';
 
-export function showProgress(message: string, progressCallback: (progress: Progress<unknown>) => Promise<void>): void {
-    window.withProgress({
+export async function showProgress(message: string, progressCallback: (progress: Progress<unknown>) => Promise<void>): Promise<void> {
+    await window.withProgress({
         location: ProgressLocation.Notification,
-        title: message,
+        title: 'AWS boto3 IDE',
         cancellable: true
     }, async progress => {
+        progress.report({ message });
         await progressCallback(progress);
     });
 }
 
 
 export async function getServicePackages(recommended: string[] = []): Promise<PypiPackage[]> {
-    const smartInstaller = new SmartInstaller();
+    const smartInstaller = await createSmartInstaller();
     const boto3Version = await smartInstaller.getBoto3Version();
     const installedPackages = await smartInstaller.pip.listPackages();
 

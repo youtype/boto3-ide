@@ -5,6 +5,8 @@
 
 Supports [pip](https://pypi.org/project/pip/), [poetry](https://python-poetry.org/) and [pipenv](https://pypi.org/project/pipenv/) installers.
 
+Add type checking for all `boto3` services with [pyright](https://github.com/microsoft/pyright) and [mypy](http://mypy-lang.org/).
+
 ![boto3.typed](https://raw.githubusercontent.com/vemel/mypy_boto3_builder/master/logo.png)
 
 - [AWS boto3](#aws-boto3)

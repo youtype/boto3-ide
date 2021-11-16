@@ -2,7 +2,7 @@
 
 All notable changes to the "boto3-ide" extension will be documented in this file.
 
-## [Unreleased]
+## [0.3.0]
 ### Added
 - New `Select installer` command
 

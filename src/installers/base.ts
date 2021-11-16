@@ -38,7 +38,7 @@ export abstract class BaseInstaller {
         this.throwError(message);
     }
 
-    throwError(message: string) {
+    throwError(message: string): never {
         console.error(message);
         window.showErrorMessage(message);
         throw new Error(message);
@@ -101,9 +101,13 @@ export abstract class BaseInstaller {
         console.log(`Exec: ${cmd}`);
         const oldCwd = process.cwd();
         process.chdir(this.workDir);
-        const result = await exec(cmd);
-        process.chdir(oldCwd);
-        return result;
+        try {
+            return await exec(cmd);
+        } catch {
+            this.throwError(`Installer ${this.name} failed on command: ${cmd}`);
+        } finally {
+            process.chdir(oldCwd);
+        }
     }
 
     abstract installPackage(name: string, version: string, extras: string[], dev: boolean): Promise<void>;

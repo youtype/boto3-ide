@@ -10,7 +10,7 @@ export async function getOrInstallBoto3Version(): Promise<string> {
     }
 
     const action = await window.showErrorMessage(
-        `boto3 is not installed in ${smartInstaller.pythonPath}!`,
+        `boto3 is not installed in ${smartInstaller.mainPythonPath}!`,
         `Install with ${smartInstaller.getInstallers().map(x => x.name).join(' / ')}`,
     );
     if (!action) { return ""; }

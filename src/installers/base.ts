@@ -2,16 +2,18 @@ import exec from '../exec';
 import PipPackage from './pipPackage';
 import * as path from 'path';
 import * as fs from 'fs';
-import { workspace } from "vscode";
+import { window, workspace } from "vscode";
 
 export abstract class BaseInstaller {
     abstract name: string;
-    pythonPath: string;
+    pythonPaths: string[];
+    mainPythonPath: string;
     workDir: string;
     installerCmd: string;
 
-    constructor(pythonPath: string, workDir: string) {
-        this.pythonPath = pythonPath;
+    constructor(pythonPaths: string[], workDir: string) {
+        this.pythonPaths = pythonPaths;
+        this.mainPythonPath = pythonPaths[0];
         this.workDir = workDir;
         this.installerCmd = "";
     }
@@ -19,14 +21,8 @@ export abstract class BaseInstaller {
     async getInstallerCmd(): Promise<string> {
         if (this.installerCmd) { return this.installerCmd; }
         const commands: string[] = [
-            `${this.pythonPath} -m ${this.name}`,
-            workspace.getConfiguration('python').get('defaultInterpreterPath')
-                ? `${workspace.getConfiguration('python').get('defaultInterpreterPath')} -m ${this.name}`
-                : '',
-            workspace.getConfiguration('python').get('pythonPath')
-                ? `${workspace.getConfiguration('python').get('pythonPath')} -m ${this.name}`
-                : '',
-            workspace.getConfiguration('python').get(`${this.name}Path`) || ''
+            workspace.getConfiguration('python').get(`${this.name}Path`) || '',
+            ...this.pythonPaths,
         ];
         for (const command of commands) {
             if (!command) { continue; }
@@ -38,8 +34,9 @@ export abstract class BaseInstaller {
                 console.log(`${command} - failed with ${e}`);
             }
         }
-        this.installerCmd = `python -m ${this.name}`;
-        return this.installerCmd;
+        const message = `Could not find ${this.name} installer in any Python path`;
+        window.showErrorMessage(message);
+        throw new Error(message);
     }
 
     parsePackageData(s: string): PipPackage {
@@ -87,7 +84,7 @@ export abstract class BaseInstaller {
     }
 
     async listPackages(): Promise<PipPackage[]> {
-        const output = (await exec(`${this.pythonPath} -m pip freeze`)).stdout;
+        const output = (await exec(`${this.mainPythonPath} -m pip freeze`)).stdout;
         return (
             output
                 .split(/\r?\n/)

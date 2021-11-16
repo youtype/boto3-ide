@@ -6,23 +6,24 @@ import PipPackage from './pipPackage';
 import PipenvInstaller from './pipenv';
 import { BaseInstaller } from './base';
 import { showProgress } from '../utils';
-import { getDefaultPythonPath } from '../pythonPath';
 
 
 export class SmartInstaller {
-    pythonPath: string;
+    pythonPaths: string[];
+    mainPythonPath: string;
     workDir: string;
     poetry: PoetryInstaller;
     pip: PipInstaller;
     pipenv: PipenvInstaller;
     installedPackages: PipPackage[];
 
-    constructor(pythonPath: string) {
-        this.pythonPath = pythonPath;
-        this.workDir = getWorkDir();
-        this.poetry = new PoetryInstaller(this.pythonPath, this.workDir);
-        this.pip = new PipInstaller(this.pythonPath, this.workDir);
-        this.pipenv = new PipenvInstaller(this.pythonPath, this.workDir);
+    constructor(pythonPaths: string[]) {
+        this.pythonPaths = pythonPaths;
+        this.mainPythonPath = pythonPaths[0];
+        this.workDir = this.getWorkDir();
+        this.poetry = new PoetryInstaller(this.pythonPaths, this.workDir);
+        this.pip = new PipInstaller(this.pythonPaths, this.workDir);
+        this.pipenv = new PipenvInstaller(this.pythonPaths, this.workDir);
         this.installedPackages = [];
     }
 
@@ -111,35 +112,50 @@ export class SmartInstaller {
 
     async getBoto3Version(): Promise<string> {
         try {
-            return (await this.pip.exec(`${this.pythonPath} -c "import boto3; print(boto3.__version__)"`)).stdout.trim();
+            return (await this.pip.exec(`${this.mainPythonPath} -c "import boto3; print(boto3.__version__)"`)).stdout.trim();
         } catch (e) {
             console.error(e);
         }
         return "";
     }
-}
 
-export function getWorkDir(): string {
-    if (workspace.workspaceFolders?.length) {
-        return workspace.workspaceFolders[0].uri.fsPath;
+    getWorkDir(): string {
+        if (workspace.workspaceFolders?.length) {
+            return workspace.workspaceFolders[0].uri.fsPath;
+        }
+        return process.cwd();
     }
-    return process.cwd();
 }
 
-async function getPythonPath(): Promise<string> {
+async function getPythonPaths(): Promise<string[]> {
+    const result: string[] = [];
     const extension = extensions.getExtension('ms-python.python')!;
-    if (!extension) {
-        window.showErrorMessage("Python extension is not installed!");
-        return "python";
+    if (extension) {
+        if (!extension.isActive) {
+            await showProgress(
+                `Waiting for Python extension to activate...`,
+                async () => {
+                    await extension.activate();
+                }
+            );
+        }
+        const executionDetails = extension.exports.settings.getExecutionDetails();
+        if (executionDetails?.execCommand.length) {
+            result.push(executionDetails.execCommand[0]);
+        }
     }
-    if (!extension.isActive) {
-        await extension.activate();
-    }
-    const executionDetails = extension.exports.settings.getExecutionDetails();
-    if (!executionDetails?.execCommand.length) { return "python"; }
-    return executionDetails.execCommand[0];
+
+    const newPath: string = workspace.getConfiguration('python').get('defaultInterpreterPath') || '';
+    if (newPath.length && !result.includes(newPath)) { result.push(newPath); }
+
+    const oldPath: string = workspace.getConfiguration('python').get('pythonPath') || '';
+    if (oldPath.length && !result.includes(oldPath)) { result.push(oldPath); }
+
+    const failbackPath = 'python';
+    if (!result.includes(failbackPath)) { result.push(failbackPath); }
+    return result;
 }
 
 export async function createSmartInstaller(): Promise<SmartInstaller> {
-    return new SmartInstaller(await getPythonPath());
+    return new SmartInstaller(await getPythonPaths());
 }

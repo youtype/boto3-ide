@@ -11,10 +11,12 @@ const INSTALLER_KEY: string = 'installer';
 
 export class InstallerItem implements QuickPickItem {
     label: string;
+    detail: string;
     picked: boolean;
 
     constructor(public installer: BaseInstaller, picked: boolean) {
         this.label = installer.name;
+        this.detail = installer.description;
         this.picked = picked;
     }
 }

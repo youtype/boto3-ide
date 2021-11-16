@@ -2,7 +2,8 @@ import { BaseInstaller } from './base';
 
 
 export default class PipInstaller extends BaseInstaller {
-    name = "pip";
+    name = 'pip';
+    description = 'Installs packages directly without lockfile.';
 
     async installPackage(name: string, version: string, extras: string[], dev: boolean): Promise<void> {
         const packageName = this.buildPackageName(name, extras);

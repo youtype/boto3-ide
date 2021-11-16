@@ -6,6 +6,7 @@ import { window, workspace } from "vscode";
 
 export abstract class BaseInstaller {
     abstract name: string;
+    abstract description: string;
     pythonPaths: string[];
     mainPythonPath: string;
     workDir: string;

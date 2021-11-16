@@ -5,6 +5,7 @@ import { BaseInstaller } from './base';
 
 export default class PipenvInstaller extends BaseInstaller {
     name = "pipenv";
+    description = 'Updates pyproject.toml and Pipfile.lock. Make sure you use https://pypi.org/simple source.';
 
     async installPackage(name: string, version: string, extras: string[], dev: boolean): Promise<void> {
         const packageName = this.buildPackageName(name, extras);

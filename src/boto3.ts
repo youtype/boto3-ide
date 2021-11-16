@@ -11,7 +11,7 @@ export async function getOrInstallBoto3Version(context: ExtensionContext): Promi
 
     const action = await window.showErrorMessage(
         `boto3 is not installed in ${smartInstaller.mainPythonPath}!`,
-        `Install with ${smartInstaller.getInstallers().map(x => x.name).join(' / ')}`,
+        `Install now`,
     );
     if (!action) { return ""; }
 

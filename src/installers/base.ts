@@ -41,7 +41,7 @@ export abstract class BaseInstaller {
 
     throwError(message: string): never {
         console.error(message);
-        window.showErrorMessage(message);
+        // window.showErrorMessage(message);
         throw new Error(message);
     }
 

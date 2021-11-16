@@ -1,12 +1,23 @@
 import PoetryInstaller from './poetry';
 import PipInstaller from './pip';
 import { PypiPackage } from '../pypi';
-import { window, extensions, workspace } from 'vscode';
+import { window, extensions, workspace, ExtensionContext, QuickPickItem } from 'vscode';
 import PipPackage from './pipPackage';
 import PipenvInstaller from './pipenv';
 import { BaseInstaller } from './base';
 import { showProgress } from '../utils';
 
+const INSTALLER_KEY: string = 'installer';
+
+export class InstallerItem implements QuickPickItem {
+    label: string;
+    picked: boolean;
+
+    constructor(public installer: BaseInstaller, picked: boolean) {
+        this.label = installer.name;
+        this.picked = picked;
+    }
+}
 
 export class SmartInstaller {
     pythonPaths: string[];
@@ -16,9 +27,11 @@ export class SmartInstaller {
     pip: PipInstaller;
     pipenv: PipenvInstaller;
     installedPackages: PipPackage[];
+    context: ExtensionContext;
 
-    constructor(pythonPaths: string[]) {
+    constructor(pythonPaths: string[], context: ExtensionContext) {
         this.pythonPaths = pythonPaths;
+        this.context = context;
         this.mainPythonPath = pythonPaths[0];
         this.workDir = this.getWorkDir();
         this.poetry = new PoetryInstaller(this.pythonPaths, this.workDir);
@@ -28,8 +41,6 @@ export class SmartInstaller {
     }
 
     getInstallers(): BaseInstaller[] {
-        if (this.poetry.isInUse()) { return [this.poetry]; }
-        if (this.pipenv.isInUse()) { return [this.pipenv]; }
         let result = [];
         if (this.poetry.lockFileExists()) {
             result.push(this.poetry);
@@ -45,13 +56,38 @@ export class SmartInstaller {
         const installers = this.getInstallers();
         if (!installers.length) { return undefined; }
         if (installers.length === 1) { return installers[0]; }
-        const choices = installers.map(x => `Use ${x.name}`);
-        const choice = await window.showInformationMessage(
-            'Multiple installers detected, pick one',
-            ...choices
-        );
-        if (!choice) { return; }
-        return installers[choices.indexOf(choice)];
+        const selectedInstallerName: string = this.context.workspaceState.get(INSTALLER_KEY) || '';
+        let selectedInstaller = installers.find(x => x.name === selectedInstallerName);
+        if (selectedInstaller) { return selectedInstaller; }
+
+        selectedInstaller = await this.selectInstaller(installers);
+        if (!selectedInstaller) { return; }
+        return selectedInstaller;
+    }
+
+    async selectInstaller(installers: BaseInstaller[]) {
+        const quickPick = window.createQuickPick<InstallerItem>();
+        quickPick.placeholder = 'Select installer';
+        const savedInstallerName = this.context.workspaceState.get(INSTALLER_KEY) || "";
+        quickPick.items = installers.map(x => new InstallerItem(x, x.name === savedInstallerName));
+        quickPick.show();
+
+        const selectedInstaller: BaseInstaller | null = await new Promise(resolve => {
+            quickPick.onDidHide(() => {
+                resolve(null);
+                quickPick.dispose();
+            });
+            quickPick.onDidAccept(async () => {
+                const result = quickPick.selectedItems[0];
+                resolve(result.installer);
+                quickPick.dispose();
+            });
+        });
+
+        if (selectedInstaller) {
+            this.context.workspaceState.update(INSTALLER_KEY, selectedInstaller.name);
+            return selectedInstaller;
+        }
     }
 
     async installPackages(installPackages: PypiPackage[], removePackages: PypiPackage[], version: string, dev: boolean) {
@@ -156,6 +192,6 @@ async function getPythonPaths(): Promise<string[]> {
     return result;
 }
 
-export async function createSmartInstaller(): Promise<SmartInstaller> {
-    return new SmartInstaller(await getPythonPaths());
+export async function createSmartInstaller(context: ExtensionContext): Promise<SmartInstaller> {
+    return new SmartInstaller(await getPythonPaths(), context);
 }

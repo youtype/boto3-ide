@@ -1,5 +1,5 @@
 import { PypiPackageItem } from "./utils";
-import { window } from "vscode";
+import { ExtensionContext, window } from "vscode";
 
 import { createSmartInstaller } from './installers/smart';
 import { PypiPackage } from "./pypi";
@@ -21,9 +21,9 @@ function getSuccessMessage(selected: readonly PypiPackageItem[]) {
     return `Support enabled for ${labels.join(', ')}, and ${lastLabels.length} more services.`;
 }
 
-export default async function modifyPackages(servicePackages: PypiPackage[], boto3Version: string) {
+export default async function modifyPackages(servicePackages: PypiPackage[], context: ExtensionContext, boto3Version: string) {
     const quickPick = window.createQuickPick<PypiPackageItem>();
-    quickPick.placeholder = 'Select boto3 services';
+    quickPick.placeholder = 'Select boto3 services...';
     quickPick.canSelectMany = true;
     quickPick.busy = true;
     quickPick.show();
@@ -50,7 +50,7 @@ export default async function modifyPackages(servicePackages: PypiPackage[], bot
 
     const selectedPackages = selectedItems.map(x => x.pypiPackage);
     const removePackages = servicePackages.filter(x => x.installed).filter(x => !selectedPackages.includes(x));
-    const smartInstaller = await createSmartInstaller();
+    const smartInstaller = await createSmartInstaller(context);
     await smartInstaller.installPackages(selectedPackages, removePackages, boto3Version, true);
     window.showInformationMessage(getSuccessMessage(selectedItems));
 }

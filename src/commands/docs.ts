@@ -1,13 +1,13 @@
 import { getServicePackages, PypiPackageItem } from "../utils";
-import { window, env, Uri } from "vscode";
+import { window, env, Uri, ExtensionContext } from "vscode";
 
-export default async function handle(): Promise<void> {
+export default async function handle(context: ExtensionContext): Promise<void> {
     const quickPick = window.createQuickPick<PypiPackageItem>();
     quickPick.placeholder = 'Documentation will be opened in a browser';
     quickPick.busy = true;
     quickPick.show();
 
-    const servicePackages = await getServicePackages();
+    const servicePackages = await getServicePackages(context);
 
     let pickedServicePackages = servicePackages.filter(x => x.installed);
     if (!pickedServicePackages.length) {

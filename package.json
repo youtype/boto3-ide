@@ -38,7 +38,8 @@
 		"onCommand:boto3-ide.modify",
 		"onCommand:boto3-ide.update",
 		"onCommand:boto3-ide.docs",
-		"onCommand:boto3-ide.autodiscover"
+		"onCommand:boto3-ide.autodiscover",
+		"onCommand:boto3-ide.installer"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -62,6 +63,10 @@
 			{
 				"command": "boto3-ide.autodiscover",
 				"title": "AWS boto3: Auto-discover boto3 services in current project"
+			},
+			{
+				"command": "boto3-ide.installer",
+				"title": "AWS boto3: Select installer"
 			}
 		]
 	},

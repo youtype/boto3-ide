@@ -3,10 +3,12 @@ import { getOrInstallBoto3Version } from '../boto3';
 import modifyPackages from "../modifyPackages";
 import SourceScanner from "../sourceScanner";
 import { PypiPackage } from "../pypi";
+import { ExtensionContext } from "vscode";
 
-export default async function handle(): Promise<void> {
-    const boto3Version = await getOrInstallBoto3Version();
+export default async function handle(context: ExtensionContext): Promise<void> {
+    const boto3Version = await getOrInstallBoto3Version(context);
     if (!boto3Version) { return; }
+
     const sourceScanner = new SourceScanner();
 
     let servicePackages: PypiPackage[] = [];
@@ -24,8 +26,8 @@ export default async function handle(): Promise<void> {
 
             progress.report({ message: `Checking installed packages...` });
             const serviceNames = [...serviceNamesSet];
-            servicePackages = await getServicePackages(serviceNames);
+            servicePackages = await getServicePackages(context, serviceNames);
         }
     );
-    await modifyPackages(servicePackages, boto3Version);
+    await modifyPackages(servicePackages, context, boto3Version);
 }

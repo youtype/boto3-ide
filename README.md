@@ -14,6 +14,7 @@ Supports [pip](https://pypi.org/project/pip/), [poetry](https://python-poetry.or
     - [Add or remove services](#add-or-remove-services)
     - [Update services](#update-services)
     - [Browse documentation](#browse-documentation)
+    - [Select installer](#select-installer)
   - [Requirements](#requirements)
   - [1.0.0 roadmap](#100-roadmap)
   - [Known issues](#known-issues)
@@ -47,6 +48,10 @@ Optionally updates `boto3`/`botocore`.
 
 Select any installed service to see all generated types for easier type checking.
 
+### Select installer
+
+Allows to choose between `poetry`, `pipenv` and `pip` install methods.
+
 ## Requirements
 
 - [Pylance](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance)
@@ -61,8 +66,14 @@ Select any installed service to see all generated types for easier type checking
 - [ ] Check Python version before installing (3.6+)
 
 ## Known issues
-- Installation fails if `poetry`/`pipenv` uses non-public PyPI as a source
-- Extension commands can be blocked by non-active Python extension 
+
+> Installation fails if `poetry`/`pipenv` uses non-public PyPI as a source.
+
+Use `pip` installer instead.
+
+> Extension commands can be blocked by non-active Python extension.
+
+I am working on it.
 
 ## Release Notes
 

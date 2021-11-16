@@ -51,6 +51,8 @@ export default async function modifyPackages(servicePackages: PypiPackage[], con
     const selectedPackages = selectedItems.map(x => x.pypiPackage);
     const removePackages = servicePackages.filter(x => x.installed).filter(x => !selectedPackages.includes(x));
     const smartInstaller = await createSmartInstaller(context);
-    await smartInstaller.installPackages(selectedPackages, removePackages, boto3Version, true);
-    window.showInformationMessage(getSuccessMessage(selectedItems));
+    const result = await smartInstaller.installPackages(selectedPackages, removePackages, boto3Version, true);
+    if (result) {
+        window.showInformationMessage(getSuccessMessage(selectedItems));
+    }
 }

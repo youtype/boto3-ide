@@ -90,12 +90,13 @@ export class SmartInstaller {
         }
     }
 
-    async installPackages(installPackages: PypiPackage[], removePackages: PypiPackage[], version: string, dev: boolean) {
+    async installPackages(installPackages: PypiPackage[], removePackages: PypiPackage[], version: string, dev: boolean): Promise<boolean> {
         const installer = await this.getInstaller();
-        if (!installer) { return; }
+        if (!installer) { return false; }
 
         await this._installPackages(installer, installPackages, removePackages, version, dev);
         this.resetListPackages();
+        return true;
     }
 
     async install(name: string, version: string, dev: boolean = false) {

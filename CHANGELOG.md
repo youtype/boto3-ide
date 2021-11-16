@@ -15,6 +15,7 @@ All notable changes to the "boto3-ide" extension will be documented in this file
 - Added missing service packages
 - Improved service list update script
 - Skip duplicate Python paths when trying to find installers
+- Success message is no longer shown if installation has been interrupted by user
 
 ## [0.2.1]
 ### Fixed

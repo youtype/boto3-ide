@@ -16,6 +16,7 @@ Supports [pip](https://pypi.org/project/pip/), [poetry](https://python-poetry.or
     - [Browse documentation](#browse-documentation)
   - [Requirements](#requirements)
   - [1.0.0 roadmap](#100-roadmap)
+  - [Known issues](#known-issues)
   - [Release Notes](#release-notes)
 
 ## TLDR
@@ -54,8 +55,14 @@ Select any installed service to see all generated types for easier type checking
 
 ## 1.0.0 roadmap
 
-- [ ] Support `pipenv`
-- [ ] Auto-populate `boto3` services instead of hardcoding
+- [ ] Support `conda`
+- [ ] Add welcome notification for better UX
+- [ ] Open settings to help activate `pylance` and type checking
+- [ ] Check Python version before installing (3.6+)
+
+## Known issues
+- Installation fails if `poetry`/`pipenv` uses non-public PyPI as a source
+- Extension commands can be blocked by non-active Python extension 
 
 ## Release Notes
 

@@ -3,10 +3,13 @@
 All notable changes to the "boto3-ide" extension will be documented in this file.
 
 ## [Unreleased]
+### Changed
+- Added progress while wating for Python extension to be active
+- `poetryPath`/`pipenvPath` now has the highest priority before searching in Python path
+ 
 ### Fixed
 - Added missing service packages
 - Improved service list update script
-- `poetryPath`/`pipenvPath` now has the highest priority before searching in Python path
 - Skip duplicate Python paths when trying to find installers
 
 ## [0.2.1]

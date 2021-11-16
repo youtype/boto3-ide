@@ -35,6 +35,11 @@ export abstract class BaseInstaller {
             }
         }
         const message = `Could not find ${this.name} installer in any Python path`;
+        this.throwError(message);
+    }
+
+    throwError(message: string) {
+        console.error(message);
         window.showErrorMessage(message);
         throw new Error(message);
     }

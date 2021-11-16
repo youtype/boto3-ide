@@ -2,6 +2,11 @@
 
 All notable changes to the "boto3-ide" extension will be documented in this file.
 
+## [Unreleased]
+### Fixed
+- Added missing service packages
+- Improved service list update script
+
 ## [0.2.1]
 ### Fixed
 - Get pythonPath from `Python` VSCode extension API

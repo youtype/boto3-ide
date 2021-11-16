@@ -7,7 +7,7 @@ All notable changes to the "boto3-ide" extension will be documented in this file
 - New `Select installer` command
 
 ### Changed
-- Added progress while wating for Python extension to be active
+- Added progress while waiting for Python extension to be active
 - `poetryPath`/`pipenvPath` now has the highest priority before searching in Python path
 - Selected installer is saved per workspace
  

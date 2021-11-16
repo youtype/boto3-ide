@@ -33,7 +33,7 @@ export class Boto3StubsPackage implements PypiPackage {
         return '';
     }
     getDetail(): string {
-        return `boto3/botocore auto-complete and type annotations`;
+        return `boto3/botocore IntelliSense and type annotations`;
     }
     getShortLabel(): string {
         return 'boto3';

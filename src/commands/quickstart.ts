@@ -16,7 +16,7 @@ export default async function handle(): Promise<void> {
     const autoCompleteEnabled = servicePackages.filter(x => x.installed && x.getExtraName()).length > 0;
     const messageParts = [
         `${pylanceEnabled ? '✓' : '✗'} Pylance`,
-        `${autoCompleteEnabled ? '✓' : '✗'} Auto-complete`,
+        `${autoCompleteEnabled ? '✓' : '✗'} IntelliSense`,
         `${typeCheckingEnabled ? '✓' : '✗'} Type checking`,
     ];
     const actions = [];

@@ -6,7 +6,7 @@ import { PypiPackage } from "./pypi";
 
 function getSuccessMessage(selected: readonly PypiPackageItem[]) {
     if (!selected.length) {
-        return 'Boto3 code auto-complete and type checking disabled!';
+        return 'Boto3 IntelliSense and type checking disabled!';
     }
     const labels = selected.map(x => x.pypiPackage.getShortLabel());
     if (selected.length === 1) {

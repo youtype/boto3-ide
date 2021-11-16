@@ -18,7 +18,7 @@ export class ServicePackage implements PypiPackage {
     }
 
     getDetail(): string {
-        return `boto3.client('${this.getExtraName()}') auto-complete and type annotations`;
+        return `boto3.client('${this.getExtraName()}') IntelliSense and type annotations`;
     }
     getDescription(): string {
         if (this.installed) { return '(installed)'; }

@@ -1,7 +1,7 @@
 # AWS boto3
 
 
-[VSCode](https://code.visualstudio.com/) extension to enable code auto-complete and type checking for all [boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html) services.
+[VSCode](https://code.visualstudio.com/) extension to enable IntelliSense and type checking for all [boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html) services.
 
 Supports [pip](https://pypi.org/project/pip/), [poetry](https://python-poetry.org/) and [pipenv](https://pypi.org/project/pipenv/) installers.
 
@@ -25,7 +25,7 @@ Install the extension and run `AWS boto3: Quick Start`.
 
 ### Quick Start
 
-Setup code auto-complete and type checking in a new project.
+Setup IntelliSense and type checking in a new project.
 
 ### Auto-discover services
 
@@ -34,7 +34,7 @@ Find services you might need based on your project source code.
 ### Add or remove services
 
 Start using this extension with this command.
-It enables type checking and auto-complete for different `boto3` services.
+It enables type checking and IntelliSense for different `boto3` services.
 You can enable all services or only ones that are used in the current project.
 
 ### Update services
@@ -49,7 +49,7 @@ Select any installed service to see all generated types for easier type checking
 ## Requirements
 
 - [Pylance](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance)
-  for better auto-complete support
+  for better IntelliSense support
 - Set `python.analysis.typeCheckingMode` setting to `basic` to verify types with `Pylance` (optional)
 
 ## 1.0.0 roadmap

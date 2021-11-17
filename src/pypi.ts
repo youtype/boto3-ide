@@ -5,6 +5,7 @@ export interface PypiPackage {
     version: string;
     installed: boolean;
     recommended: boolean;
+    isMaster: boolean;
 
     getShortLabel(): string;
     getLabel(): string;
@@ -15,6 +16,8 @@ export interface PypiPackage {
 }
 
 export class Boto3StubsPackage implements PypiPackage {
+    isMaster = true;
+
     moduleName: string;
     version: string;
     installed: boolean;

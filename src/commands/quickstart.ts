@@ -4,6 +4,7 @@ import { getOrInstallBoto3Version } from '../boto3';
 import modifyHandler from './modify';
 import updateHandler from './update';
 import autodiscoverhandler from './autodiscover';
+import { NAME } from "../constants";
 
 
 export default async function handle(context: ExtensionContext): Promise<void> {
@@ -12,8 +13,8 @@ export default async function handle(context: ExtensionContext): Promise<void> {
 
     const servicePackages = await getServicePackages(context);
     const pylanceEnabled = workspace.getConfiguration('python').get('languageServer') === 'Pylance';
+    const autoCompleteEnabled = servicePackages.find(x => x.installed && x.isMaster) ? true : false;
     const typeCheckingEnabled = workspace.getConfiguration('python').get('analysis.typeCheckingMode') !== 'off';
-    const autoCompleteEnabled = servicePackages.filter(x => x.installed && x.getExtraName()).length > 0;
     const messageParts = [
         `${pylanceEnabled ? '✓' : '✗'} Pylance`,
         `${autoCompleteEnabled ? '✓' : '✗'} IntelliSense`,
@@ -22,18 +23,22 @@ export default async function handle(context: ExtensionContext): Promise<void> {
     const actions = [];
     if (!pylanceEnabled) { actions.push('Enable Pylance'); }
     if (!typeCheckingEnabled) { actions.push('Enable Type Checking'); }
-    actions.push('Modify services', 'Auto-discover services', 'Update');
+    actions.push(
+        'Auto-discover boto3 services',
+        `Modify ${NAME}`,
+        `Update ${NAME}`
+    );
     const action = await window.showInformationMessage(messageParts.join(' | '), ...actions);
     if (action === 'Enable Pylance' || action === 'Enable Type Checking') {
         env.openExternal(Uri.parse('https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance'));
     }
-    if (action === 'Modify services') {
+    if (action === `Modify ${NAME}`) {
         await modifyHandler(context);
     }
-    if (action === 'Auto-discover services') {
+    if (action === 'Auto-discover boto3 services') {
         await autodiscoverhandler(context);
     }
-    if (action === 'Update') {
+    if (action === `Update ${NAME}`) {
         await updateHandler(context);
     }
 }

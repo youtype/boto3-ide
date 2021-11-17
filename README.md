@@ -62,10 +62,8 @@ Allows to choose between `poetry`, `pipenv` and `pip` install methods.
 
 ## 1.0.0 roadmap
 
-- [ ] Support `conda`
-- [ ] Add welcome notification for better UX
-- [ ] Open settings to help activate `pylance` and type checking
-- [ ] Check Python version before installing (3.6+)
+- Support `conda`
+- Open settings to help activate `pylance` and type checking
 
 ## Known issues
 

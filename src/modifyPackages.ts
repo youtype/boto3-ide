@@ -1,24 +1,16 @@
-import { PypiPackageItem } from "./utils";
+import { pluralize, PypiPackageItem } from './utils';
 import { ExtensionContext, window } from "vscode";
 
 import { createSmartInstaller } from './installers/smart';
-import { PypiPackage } from "./pypi";
+import { PypiPackage } from './pypi';
+import { NAME } from './constants';
 
 function getSuccessMessage(selected: readonly PypiPackageItem[]) {
     if (!selected.length) {
-        return 'Boto3 IntelliSense and type checking disabled!';
+        return `${NAME} disabled!`;
     }
-    const labels = selected.map(x => x.pypiPackage.getShortLabel());
-    if (selected.length === 1) {
-        return `Support enabled for ${labels[0]} service.`;
-    }
-    if (selected.length < 7) {
-        const lastLabel = labels.pop();
-        return `Support enabled for ${labels.join(', ')}, and ${lastLabel} services.`;
-    }
-
-    const lastLabels = labels.splice(5);
-    return `Support enabled for ${labels.join(', ')}, and ${lastLabels.length} more services.`;
+    const servicePackages = selected.filter(x => !x.pypiPackage.isMaster);
+    return `${NAME} enabled for ${pluralize(servicePackages.length, 'service')}.`;
 }
 
 export default async function modifyPackages(servicePackages: PypiPackage[], context: ExtensionContext, boto3Version: string) {
@@ -53,6 +45,6 @@ export default async function modifyPackages(servicePackages: PypiPackage[], con
     const smartInstaller = await createSmartInstaller(context);
     const result = await smartInstaller.installPackages(selectedPackages, removePackages, boto3Version, true);
     if (result) {
-        window.showInformationMessage(getSuccessMessage(selectedItems));
+        await window.showInformationMessage(getSuccessMessage(selectedItems));
     }
 }

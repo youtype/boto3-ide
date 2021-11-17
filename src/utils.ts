@@ -3,6 +3,12 @@ import { servicePackages } from './servicePackages';
 import { Boto3StubsPackage, PypiPackage } from './pypi';
 import { createSmartInstaller } from './installers/smart';
 
+export function pluralize(count: number, singular: string, plural: string = "") {
+    if (count === 1) { return `${count} ${singular}`; }
+    const pluralText = plural || `${singular}s`;
+    return `${count} ${pluralText}`;
+}
+
 export async function showProgress(message: string, progressCallback: (progress: Progress<unknown>) => Promise<void>): Promise<void> {
     await window.withProgress({
         location: ProgressLocation.Notification,
@@ -32,7 +38,7 @@ export async function getServicePackages(context: ExtensionContext, recommended:
         const installedPackage = installedPackages.find(x => x.name === sp.moduleName);
         sp.installed = installedPackage ? true : false;
         sp.version = installedPackage ? installedPackage.version : boto3Version;
-        sp.recommended = !sp.getExtraName().length || recommended.includes(sp.getExtraName());
+        sp.recommended = sp.isMaster || recommended.includes(sp.getExtraName());
     });
     servicePackages.sort((a, b) => b.downloads - a.downloads);
     servicePackages.sort((a, b) => (b.recommended ? 1 : 0) - (a.recommended ? 1 : 0));

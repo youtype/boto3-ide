@@ -6,8 +6,7 @@ import PipPackage from './pipPackage';
 import PipenvInstaller from './pipenv';
 import { BaseInstaller } from './base';
 import { showProgress } from '../utils';
-
-const INSTALLER_KEY: string = 'installer';
+import { INSTALLER } from '../constants';
 
 export class InstallerItem implements QuickPickItem {
     label: string;
@@ -58,7 +57,7 @@ export class SmartInstaller {
         const installers = this.getInstallers();
         if (!installers.length) { return undefined; }
         if (installers.length === 1) { return installers[0]; }
-        const selectedInstallerName: string = this.context.workspaceState.get(INSTALLER_KEY) || '';
+        const selectedInstallerName: string = this.context.workspaceState.get(INSTALLER) || '';
         let selectedInstaller = installers.find(x => x.name === selectedInstallerName);
         if (selectedInstaller) { return selectedInstaller; }
 
@@ -70,7 +69,7 @@ export class SmartInstaller {
     async selectInstaller(installers: BaseInstaller[]) {
         const quickPick = window.createQuickPick<InstallerItem>();
         quickPick.placeholder = 'Select installer';
-        const savedInstallerName = this.context.workspaceState.get(INSTALLER_KEY) || "";
+        const savedInstallerName = this.context.workspaceState.get(INSTALLER) || "";
         quickPick.items = installers.map(x => new InstallerItem(x, x.name === savedInstallerName));
         quickPick.show();
 
@@ -87,7 +86,7 @@ export class SmartInstaller {
         });
 
         if (selectedInstaller) {
-            this.context.workspaceState.update(INSTALLER_KEY, selectedInstaller.name);
+            this.context.workspaceState.update(INSTALLER, selectedInstaller.name);
             return selectedInstaller;
         }
     }
@@ -115,8 +114,8 @@ export class SmartInstaller {
     }
 
     async _installPackages(installer: BaseInstaller, packages: PypiPackage[], removePackages: PypiPackage[], version: string, dev: boolean) {
-        const masterPackage = packages.find(x => !x.getExtraName().length);
-        const extraPackages = packages.filter(x => x.getExtraName());
+        const masterPackage = packages.find(x => x.isMaster);
+        const extraPackages = packages.filter(x => !x.isMaster);
 
         await showProgress(
             `Installing packages...`,

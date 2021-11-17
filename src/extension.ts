@@ -5,7 +5,7 @@ import docsHandler from './commands/docs';
 import autodiscoverHandler from './commands/autodiscover';
 import quickstartHandler from './commands/quickstart';
 import installerHandler from './commands/installer';
-import { createSmartInstaller } from './installers/smart';
+import welcomeHandler from './commands/welcome';
 
 export async function activate(context: ExtensionContext) {
     console.log('boto3-ide is now active!');
@@ -41,19 +41,7 @@ export async function activate(context: ExtensionContext) {
         })
     );
 
-    // await hello(context);
-}
-
-async function hello(context: ExtensionContext): Promise<void> {
-    const initialized = context.workspaceState.get("initialized");
-    console.log("initialized", initialized);
-    if (!initialized) {
-        context.workspaceState.update("initialized", "true");
-        const smartInstaller = await createSmartInstaller(context);
-        if (await smartInstaller.getBoto3Version()) {
-            await quickstartHandler(context);
-        }
-    }
+    await welcomeHandler(context);
 }
 
 export function deactivate() { }

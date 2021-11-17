@@ -1,8 +1,11 @@
-import { getServicePackages } from "../utils";
+import { ExtensionContext, window } from 'vscode';
+import { getServicePackages, pluralize } from "../utils";
 import { getOrInstallBoto3Version } from '../boto3';
 import { getLatestBoto3Version } from '../pypi';
 import { createSmartInstaller } from '../installers/smart';
-import { ExtensionContext, window } from 'vscode';
+import { NAME } from '../constants';
+import autodiscoverHandler from './autodiscover';
+
 
 export default async function handle(context: ExtensionContext): Promise<void> {
     let boto3Version = await getOrInstallBoto3Version(context);
@@ -23,8 +26,20 @@ export default async function handle(context: ExtensionContext): Promise<void> {
 
     const servicePackages = await getServicePackages(context);
     const installedPackages = servicePackages.filter(x => x.installed);
-    if (!installedPackages.length) { return; }
+    if (!installedPackages.length) {
+        const response = await window.showInformationMessage(
+            `No ${NAME} packages detected, nothing to update.`,
+            'Auto-discover required packages'
+        );
+        if (response) {
+            await autodiscoverHandler(context);
+        }
+        return;
+    }
 
     const smartInstaller = await createSmartInstaller(context);
-    await smartInstaller.installPackages(installedPackages, [], boto3Version, true);
+    const isInstalled = await smartInstaller.installPackages(installedPackages, [], boto3Version, true);
+    if (isInstalled) {
+        await window.showInformationMessage(`${pluralize(installedPackages.length, 'package')} updated`);
+    }
 }

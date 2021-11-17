@@ -1,6 +1,8 @@
 import { PypiPackage } from "./pypi";
 
 export class ServicePackage implements PypiPackage {
+    isMaster = false;
+
     serviceName: string;
     moduleName: string;
     version: string;

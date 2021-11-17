@@ -1,18 +1,17 @@
-import { workspace, Uri } from "vscode";
-import * as fs from "fs";
+import { workspace, Uri } from 'vscode';
+import * as fs from 'fs';
 
 
 const SERVICE_RE = /(boto3|session)\.(client|resource)\(\s*['"]+(\S+)['"]+\s*\)/g;
 
 export default class SourceScanner {
     async findPythonFiles(): Promise<Uri[]> {
-        let result: Uri[] = [];
         const exclude = [
             ...Object.keys(await workspace.getConfiguration('search', null).get('exclude') || {}),
             ...Object.keys(await workspace.getConfiguration('files', null).get('exclude') || {}),
-            "**/.venv/**",
-            "**/typings/**",
-            "**/tests/**",
+            '**/.venv/**',
+            '**/typings/**',
+            '**/tests/**',
         ].join(',');
         return await workspace.findFiles('**/*.py', `{${exclude}}`);
     }

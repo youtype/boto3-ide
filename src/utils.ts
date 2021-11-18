@@ -1,4 +1,4 @@
-import { window, ProgressLocation, Progress, ExtensionContext } from 'vscode'
+import { window, ProgressLocation, Progress, ExtensionContext, workspace } from 'vscode'
 import { servicePackages } from './servicePackages'
 import { Boto3StubsPackage, PypiPackage } from './pypi'
 import { createSmartInstaller } from './installers/smart'
@@ -54,4 +54,11 @@ export async function getServicePackages(
   servicePackages.sort((a, b) => (b.recommended ? 1 : 0) - (a.recommended ? 1 : 0))
   servicePackages.sort((a, b) => (b.installed ? 1 : 0) - (a.installed ? 1 : 0))
   return [masterPackage, ...servicePackages]
+}
+
+export function getWorkDir(): string {
+  if (workspace.workspaceFolders?.length) {
+    return workspace.workspaceFolders[0].uri.fsPath
+  }
+  return process.cwd()
 }

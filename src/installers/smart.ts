@@ -5,7 +5,7 @@ import { window, extensions, workspace, ExtensionContext } from 'vscode'
 import PipPackage from './pipPackage'
 import PipenvInstaller from './pipenv'
 import { BaseInstaller } from './base'
-import { showProgress } from '../utils'
+import { showProgress, getWorkDir } from '../utils'
 import { SETTING_INSTALLER } from '../constants'
 import { InstallerItem } from '../quickPick'
 
@@ -23,7 +23,7 @@ export class SmartInstaller {
     this.pythonPaths = pythonPaths
     this.context = context
     this.mainPythonPath = pythonPaths[0]
-    this.workDir = this.getWorkDir()
+    this.workDir = getWorkDir()
     this.poetry = new PoetryInstaller(this.pythonPaths, this.workDir)
     this.pip = new PipInstaller(this.pythonPaths, this.workDir)
     this.pipenv = new PipenvInstaller(this.pythonPaths, this.workDir)
@@ -177,13 +177,6 @@ export class SmartInstaller {
       console.error(e)
     }
     return ''
-  }
-
-  getWorkDir(): string {
-    if (workspace.workspaceFolders?.length) {
-      return workspace.workspaceFolders[0].uri.fsPath
-    }
-    return process.cwd()
   }
 }
 

@@ -1,10 +1,13 @@
 import { workspace, Uri } from 'vscode'
 import * as fs from 'fs'
+import ignore from 'ignore'
+import * as path from 'path'
 
 const SERVICE_RE = /(boto3|session)\.(client|resource)\(\s*['"]+(\S+)['"]+\s*\)/g
 
 export default class SourceScanner {
-  async findPythonFiles(): Promise<Uri[]> {
+  constructor(public workDir: string) { }
+  async findPythonFiles(): Promise<string[]> {
     const exclude = [
       ...Object.keys((await workspace.getConfiguration('search', null).get('exclude')) || {}),
       ...Object.keys((await workspace.getConfiguration('files', null).get('exclude')) || {}),
@@ -12,14 +15,33 @@ export default class SourceScanner {
       '**/typings/**',
       '**/tests/**'
     ].join(',')
-    return await workspace.findFiles('**/*.py', `{${exclude}}`)
+    const files = await workspace.findFiles('**/*.py', `{${exclude}}`)
+    const result: string[] = []
+
+    const gitignorePath = path.join(this.workDir, '.gitignore')
+    const gitignoreExists = fs.existsSync(gitignorePath)
+    const filters = gitignoreExists ? (await this.readFile(gitignorePath)).split(/\r?\n/) : []
+
+    const gitignore = ignore()
+    gitignore.add(filters)
+
+    for (const file of files) {
+      const relativePath = path.relative(this.workDir, file.fsPath)
+      if (filters.length && gitignore.test(relativePath).ignored) {
+        console.log(`File ${relativePath} is gitignored`)
+        continue
+      }
+      console.log(`Discovered ${relativePath}`)
+      result.push(file.fsPath)
+    }
+    return result
   }
 
-  async readFile(file: Uri): Promise<string> {
+  async readFile(filePath: string): Promise<string> {
     return new Promise((resolve) => {
-      fs.readFile(file.fsPath, { encoding: 'utf-8' }, (err, data) => {
+      fs.readFile(filePath, { encoding: 'utf-8' }, (err, data) => {
         if (err) {
-          console.log(`Error reading ${file.fsPath}: ${err}`)
+          console.log(`Error reading ${filePath}: ${err}`)
           resolve('')
           return
         }
@@ -28,8 +50,8 @@ export default class SourceScanner {
     })
   }
 
-  async findServices(file: Uri): Promise<Set<string>> {
-    const text = await this.readFile(file)
+  async findServices(filePath: string): Promise<Set<string>> {
+    const text = await this.readFile(filePath)
     const result: Set<string> = new Set()
     if (!text) {
       return result

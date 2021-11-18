@@ -61,7 +61,7 @@ jobs:
           npm version ${{ steps.release.outputs.tag }} --allow-same-version
       - name: Add new release to CHANGELOG.md
         id: changelog
-        uses: vemel/nextchange
+        uses: vemel/nextchange@0.1.0
         with:
           github-actions-managed: true
           release: ${{ steps.release.outputs.tag }}
@@ -70,7 +70,7 @@ jobs:
       - name: Clear Unreleased in CHANGELOG.md
         id: clear-unreleased
         if: ${{ steps.version.outputs.is-prerelease == 'false' }}
-        uses: vemel/nextchange
+        uses: vemel/nextchange@0.1.0
         with:
           github-actions-managed: true
           release: Unreleased

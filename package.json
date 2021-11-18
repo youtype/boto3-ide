@@ -1,6 +1,6 @@
 {
 	"name": "boto3-ide",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"publisher": "Boto3typed",
 	"displayName": "AWS boto3",
 	"description": "IntelliSense and type checking for all boto3 services",

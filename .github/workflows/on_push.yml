@@ -30,12 +30,10 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - name: Install package
         id: install
-        if: steps.scripts.outputs.result
         run: |
           npm install -g npm
           npm ci
       - name: Run linting
         id: lint
-        if: steps.scripts.outputs.lint
         run: |
           npm run lint

@@ -80,7 +80,7 @@ jobs:
         run: |
           git commit -am "Bump version to $VERSION"
           git push
-      - name: Publiush to Marketplace
+      - name: Publish to Marketplace
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: |

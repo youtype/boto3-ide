@@ -1,0 +1,41 @@
+name: Run style checks and unit tests
+"on":
+  push: {}
+  workflow_dispatch: {}
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version:
+          - 14
+    steps:
+      - name: Checkout current branch
+        id: checkout
+        uses: actions/checkout@v2
+      - name: Cache npm downloads
+        uses: actions/cache@v2
+        id: cache
+        if: steps.scripts.outputs.result
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node-version }}-
+      - name: Set up Node
+        id: setup-node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: https://registry.npmjs.org/
+      - name: Install package
+        id: install
+        if: steps.scripts.outputs.result
+        run: |
+          npm install -g npm
+          npm ci
+      - name: Run linting
+        id: lint
+        if: steps.scripts.outputs.lint
+        run: |
+          npm run lint

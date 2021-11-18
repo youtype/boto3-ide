@@ -11,7 +11,6 @@ export default class SourceScanner {
     const exclude = [
       ...Object.keys((await workspace.getConfiguration('search', null).get('exclude')) || {}),
       ...Object.keys((await workspace.getConfiguration('files', null).get('exclude')) || {}),
-      '**/.venv/**',
       '**/typings/**',
       '**/tests/**'
     ].join(',')

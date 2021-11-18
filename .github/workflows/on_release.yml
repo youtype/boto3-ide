@@ -70,7 +70,6 @@ jobs:
         id: changelog
         uses: vemel/nextchange@0.1.0
         with:
-          github-actions-managed: true
           release: ${{ steps.release.outputs.tag }}
           clear: true
           set: ${{ steps.release.outputs.body }}
@@ -79,7 +78,6 @@ jobs:
         if: ${{ steps.version.outputs.is-prerelease == 'false' }}
         uses: vemel/nextchange@0.1.0
         with:
-          github-actions-managed: true
           release: Unreleased
           clear: true
       - name: Commit changes
@@ -91,8 +89,13 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git commit -am "Bump version to ${VERSION}"
           git push
+      - name: Install package
+        id: install
+        run: |
+          npm install -g npm
+          npm ci
       - name: Publish to Marketplace
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: |
-          npx vsce publish
+          npm run vsce publish

@@ -24,21 +24,21 @@ export default async function handle(context: ExtensionContext): Promise<void> {
     if (!pylanceEnabled) { actions.push('Enable Pylance'); }
     if (!typeCheckingEnabled) { actions.push('Enable Type Checking'); }
     actions.push(
-        'Auto-discover boto3 services',
-        `Modify ${NAME}`,
-        `Update ${NAME}`
+        'Install',
+        'Modify',
+        'Update'
     );
-    const action = await window.showInformationMessage(messageParts.join(' | '), ...actions);
+    const action = await window.showInformationMessage(`${NAME}: ${messageParts.join(' | ')}`, ...actions);
     if (action === 'Enable Pylance' || action === 'Enable Type Checking') {
         env.openExternal(Uri.parse('https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance'));
     }
-    if (action === `Modify ${NAME}`) {
+    if (action === 'Modify') {
         await modifyHandler(context);
     }
-    if (action === 'Auto-discover boto3 services') {
+    if (action === 'Install') {
         await autodiscoverhandler(context);
     }
-    if (action === `Update ${NAME}`) {
+    if (action === 'Update') {
         await updateHandler(context);
     }
 }

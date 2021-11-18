@@ -1,14 +1,16 @@
 # Change Log
 
-All notable changes to the "boto3-ide" extension will be documented in this file.
+All notable changes to the `boto3-ide` extension will be documented in this file.
 
 ## [Unreleased]
 ### Added
-- Quick Start suggestion in a new workspace if boto3 is in use
+- Quick Start suggestion in a new workspace if `boto3` is in use
 
 ### Changed
 - If there are no packages to update, `Auto-discover` is suggested
 - Update command shows notification when update is complete
+- Installer selection got extra info and `(selected)` mark
+- Selected installer is shown on top
 
 ### Fixed
 - Pluralized services/packages in notifications

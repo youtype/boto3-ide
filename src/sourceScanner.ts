@@ -1,4 +1,4 @@
-import { workspace, Uri } from 'vscode'
+import { workspace } from 'vscode'
 import * as fs from 'fs'
 import ignore from 'ignore'
 import * as path from 'path'
@@ -6,7 +6,7 @@ import * as path from 'path'
 const SERVICE_RE = /(boto3|session)\.(client|resource)\(\s*['"]+(\S+)['"]+\s*\)/g
 
 export default class SourceScanner {
-  constructor(public workDir: string) { }
+  constructor(public workDir: string) {}
   async findPythonFiles(): Promise<string[]> {
     const exclude = [
       ...Object.keys((await workspace.getConfiguration('search', null).get('exclude')) || {}),

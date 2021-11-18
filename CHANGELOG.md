@@ -2,6 +2,12 @@
 
 All notable changes to the `boto3-ide` extension will be documented in this file.
 
+## [Unreleased]
+
+## [0.4.1]
+### Fixed
+- Error on non-readable file in the workspace
+
 ## [0.4.0]
 ### Added
 - Quick Start suggestion in a new workspace if `boto3` is in use
@@ -23,7 +29,7 @@ All notable changes to the `boto3-ide` extension will be documented in this file
 - Added progress while waiting for Python extension to be active
 - `poetryPath`/`pipenvPath` now has the highest priority before searching in Python path
 - Selected installer is saved per workspace
- 
+
 ### Fixed
 - Added missing service packages
 - Improved service list update script
@@ -52,5 +58,4 @@ All notable changes to the `boto3-ide` extension will be documented in this file
 - Services autodiscovery did not check all folders
 
 ## [0.1.0]
-
 - Initial release

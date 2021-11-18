@@ -3,11 +3,7 @@ import { servicePackages } from './servicePackages'
 import { Boto3StubsPackage, PypiPackage } from './pypi'
 import { createSmartInstaller } from './installers/smart'
 
-export function pluralize(
-  count: number,
-  singular: string,
-  plural: string = ''
-) {
+export function pluralize(count: number, singular: string, plural: string = '') {
   if (count === 1) {
     return `${count} ${singular}`
   }
@@ -42,26 +38,20 @@ export async function getServicePackages(
 
   const masterPackage = new Boto3StubsPackage()
   masterPackage.version = boto3Version
-  const masterPackageData = installedPackages.find(
-    (x) => x.name === masterPackage.moduleName
-  )
+  const masterPackageData = installedPackages.find((x) => x.name === masterPackage.moduleName)
   if (masterPackageData) {
     masterPackage.installed = true
     masterPackage.version = masterPackageData.version
   }
 
   servicePackages.forEach((sp) => {
-    const installedPackage = installedPackages.find(
-      (x) => x.name === sp.moduleName
-    )
+    const installedPackage = installedPackages.find((x) => x.name === sp.moduleName)
     sp.installed = installedPackage ? true : false
     sp.version = installedPackage ? installedPackage.version : boto3Version
     sp.recommended = sp.isMaster || recommended.includes(sp.getExtraName())
   })
   servicePackages.sort((a, b) => b.downloads - a.downloads)
-  servicePackages.sort(
-    (a, b) => (b.recommended ? 1 : 0) - (a.recommended ? 1 : 0)
-  )
+  servicePackages.sort((a, b) => (b.recommended ? 1 : 0) - (a.recommended ? 1 : 0))
   servicePackages.sort((a, b) => (b.installed ? 1 : 0) - (a.installed ? 1 : 0))
   return [masterPackage, ...servicePackages]
 }

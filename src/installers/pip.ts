@@ -11,12 +11,8 @@ export default class PipInstaller extends BaseInstaller {
     dev: boolean
   ): Promise<void> {
     const packageName = this.buildPackageName(name, extras)
-    const versionConstraint = version
-      ? this.buildVersionConstraint(version)
-      : ''
-    await this.exec(
-      `${this.mainPythonPath} -m pip install -U "${packageName}${versionConstraint}"`
-    )
+    const versionConstraint = version ? this.buildVersionConstraint(version) : ''
+    await this.exec(`${this.mainPythonPath} -m pip install -U "${packageName}${versionConstraint}"`)
   }
 
   async removePackage(name: string, dev: boolean): Promise<void> {

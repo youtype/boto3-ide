@@ -25,9 +25,7 @@ export default async function modifyPackages(
   quickPick.busy = true
   quickPick.show()
 
-  const pickedServicePackages = servicePackages.filter(
-    (x) => x.installed || x.recommended
-  )
+  const pickedServicePackages = servicePackages.filter((x) => x.installed || x.recommended)
 
   quickPick.items = servicePackages.map(
     (x) => new PypiPackageItem(x, pickedServicePackages.includes(x))
@@ -35,19 +33,17 @@ export default async function modifyPackages(
   quickPick.selectedItems = quickPick.items.filter((x) => x.picked)
   quickPick.busy = false
 
-  const selectedItems: PypiPackageItem[] | null = await new Promise(
-    (resolve) => {
-      quickPick.onDidHide(() => {
-        resolve(null)
-        quickPick.dispose()
-      })
-      quickPick.onDidAccept(async () => {
-        const result = quickPick.selectedItems
-        resolve([...result])
-        quickPick.dispose()
-      })
-    }
-  )
+  const selectedItems: PypiPackageItem[] | null = await new Promise((resolve) => {
+    quickPick.onDidHide(() => {
+      resolve(null)
+      quickPick.dispose()
+    })
+    quickPick.onDidAccept(async () => {
+      const result = quickPick.selectedItems
+      resolve([...result])
+      quickPick.dispose()
+    })
+  })
 
   if (!selectedItems) {
     return

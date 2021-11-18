@@ -14,9 +14,7 @@ export default async function handle(context: ExtensionContext): Promise<void> {
   if (!pickedServicePackages.length) {
     pickedServicePackages = servicePackages.slice(0, 5)
   }
-  quickPick.items = pickedServicePackages.map(
-    (x) => new PypiPackageItem(x, false)
-  )
+  quickPick.items = pickedServicePackages.map((x) => new PypiPackageItem(x, false))
   quickPick.busy = false
 
   const selectedItem: PypiPackageItem | null = await new Promise((resolve) => {

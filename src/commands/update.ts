@@ -51,8 +51,6 @@ export default async function handle(context: ExtensionContext): Promise<void> {
     true
   )
   if (isInstalled) {
-    await window.showInformationMessage(
-      `${pluralize(installedPackages.length, 'package')} updated`
-    )
+    await window.showInformationMessage(`${pluralize(installedPackages.length, 'package')} updated`)
   }
 }

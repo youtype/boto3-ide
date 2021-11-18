@@ -14,9 +14,7 @@ export default class PipenvInstaller extends BaseInstaller {
     dev: boolean
   ): Promise<void> {
     const packageName = this.buildPackageName(name, extras)
-    const versionConstraint = version
-      ? this.buildVersionConstraint(version)
-      : ''
+    const versionConstraint = version ? this.buildVersionConstraint(version) : ''
     const command = version ? 'install' : 'update'
     const installerCmd = await this.getInstallerCmd()
     const cmd = `${installerCmd} ${command} ${

@@ -50,11 +50,8 @@ export class SmartInstaller {
     if (installers.length === 1) {
       return installers[0]
     }
-    const selectedInstallerName: string =
-      this.context.workspaceState.get(SETTING_INSTALLER) || ''
-    let selectedInstaller = installers.find(
-      (x) => x.name === selectedInstallerName
-    )
+    const selectedInstallerName: string = this.context.workspaceState.get(SETTING_INSTALLER) || ''
+    let selectedInstaller = installers.find((x) => x.name === selectedInstallerName)
     if (selectedInstaller) {
       return selectedInstaller
     }
@@ -69,8 +66,7 @@ export class SmartInstaller {
   async selectInstaller(installers: BaseInstaller[]) {
     const quickPick = window.createQuickPick<InstallerItem>()
     quickPick.placeholder = 'Select installer'
-    const savedInstallerName =
-      this.context.workspaceState.get(SETTING_INSTALLER) || ''
+    const savedInstallerName = this.context.workspaceState.get(SETTING_INSTALLER) || ''
 
     const installerItems = installers.map(
       (x) => new InstallerItem(x, x.name === savedInstallerName)
@@ -80,25 +76,20 @@ export class SmartInstaller {
     quickPick.items = installerItems
     quickPick.show()
 
-    const selectedInstaller: BaseInstaller | null = await new Promise(
-      (resolve) => {
-        quickPick.onDidHide(() => {
-          resolve(null)
-          quickPick.dispose()
-        })
-        quickPick.onDidAccept(async () => {
-          const result = quickPick.selectedItems[0]
-          resolve(result.installer)
-          quickPick.dispose()
-        })
-      }
-    )
+    const selectedInstaller: BaseInstaller | null = await new Promise((resolve) => {
+      quickPick.onDidHide(() => {
+        resolve(null)
+        quickPick.dispose()
+      })
+      quickPick.onDidAccept(async () => {
+        const result = quickPick.selectedItems[0]
+        resolve(result.installer)
+        quickPick.dispose()
+      })
+    })
 
     if (selectedInstaller) {
-      this.context.workspaceState.update(
-        SETTING_INSTALLER,
-        selectedInstaller.name
-      )
+      this.context.workspaceState.update(SETTING_INSTALLER, selectedInstaller.name)
       return selectedInstaller
     }
   }
@@ -114,13 +105,7 @@ export class SmartInstaller {
       return false
     }
 
-    await this._installPackages(
-      installer,
-      installPackages,
-      removePackages,
-      version,
-      dev
-    )
+    await this._installPackages(installer, installPackages, removePackages, version, dev)
     this.resetListPackages()
     return true
   }
@@ -131,12 +116,9 @@ export class SmartInstaller {
       return
     }
 
-    await showProgress(
-      `Installing ${name} ${version} with ${installer.name}...`,
-      async () => {
-        await installer.installPackage(name, version, [], dev)
-      }
-    )
+    await showProgress(`Installing ${name} ${version} with ${installer.name}...`, async () => {
+      await installer.installPackage(name, version, [], dev)
+    })
     this.resetListPackages()
   }
 
@@ -156,32 +138,18 @@ export class SmartInstaller {
         progress.report({
           message: `Installing ${extraPackages.length} services with ${installer.name}...`
         })
-        await installer.installPackage(
-          masterPackage.moduleName,
-          version,
-          extras,
-          dev
-        )
+        await installer.installPackage(masterPackage.moduleName, version, extras, dev)
       } else {
         for (const extraPackage of extraPackages) {
           progress.report({
-            message: `Installing ${extraPackage.getLabel()} service with ${
-              installer.name
-            }...`
+            message: `Installing ${extraPackage.getLabel()} service with ${installer.name}...`
           })
-          await installer.installPackage(
-            extraPackage.moduleName,
-            `<=${version}`,
-            [],
-            dev
-          )
+          await installer.installPackage(extraPackage.moduleName, `<=${version}`, [], dev)
         }
       }
       for (const removePackage of removePackages) {
         progress.report({
-          message: `Removing ${removePackage.getLabel()} with ${
-            installer.name
-          }...`
+          message: `Removing ${removePackage.getLabel()} with ${installer.name}...`
         })
         await installer.removePackage(removePackage.moduleName, dev)
       }
@@ -203,9 +171,7 @@ export class SmartInstaller {
   async getBoto3Version(): Promise<string> {
     try {
       return (
-        await this.pip.exec(
-          `${this.mainPythonPath} -c "import boto3; print(boto3.__version__)"`
-        )
+        await this.pip.exec(`${this.mainPythonPath} -c "import boto3; print(boto3.__version__)"`)
       ).stdout.trim()
     } catch (e) {
       console.error(e)
@@ -226,12 +192,9 @@ async function getPythonPaths(): Promise<string[]> {
   const extension = extensions.getExtension('ms-python.python')!
   if (extension) {
     if (!extension.isActive) {
-      await showProgress(
-        `Waiting for Python extension to activate...`,
-        async () => {
-          await extension.activate()
-        }
-      )
+      await showProgress(`Waiting for Python extension to activate...`, async () => {
+        await extension.activate()
+      })
     }
     const executionDetails = extension.exports.settings.getExecutionDetails()
     if (executionDetails?.execCommand.length) {
@@ -239,14 +202,12 @@ async function getPythonPaths(): Promise<string[]> {
     }
   }
 
-  const newPath: string =
-    workspace.getConfiguration('python').get('defaultInterpreterPath') || ''
+  const newPath: string = workspace.getConfiguration('python').get('defaultInterpreterPath') || ''
   if (newPath.length && !result.includes(newPath)) {
     result.push(newPath)
   }
 
-  const oldPath: string =
-    workspace.getConfiguration('python').get('pythonPath') || ''
+  const oldPath: string = workspace.getConfiguration('python').get('pythonPath') || ''
   if (oldPath.length && !result.includes(oldPath)) {
     result.push(oldPath)
   }
@@ -258,8 +219,6 @@ async function getPythonPaths(): Promise<string[]> {
   return result
 }
 
-export async function createSmartInstaller(
-  context: ExtensionContext
-): Promise<SmartInstaller> {
+export async function createSmartInstaller(context: ExtensionContext): Promise<SmartInstaller> {
   return new SmartInstaller(await getPythonPaths(), context)
 }

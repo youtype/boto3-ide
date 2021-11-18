@@ -1,9 +1,7 @@
 import { window, Progress, ExtensionContext } from 'vscode'
 import { createSmartInstaller } from './installers/smart'
 
-export async function getOrInstallBoto3Version(
-  context: ExtensionContext
-): Promise<string> {
+export async function getOrInstallBoto3Version(context: ExtensionContext): Promise<string> {
   const smartInstaller = await createSmartInstaller(context)
   const boto3Version = await smartInstaller.getBoto3Version()
   if (boto3Version) {

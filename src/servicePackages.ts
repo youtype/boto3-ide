@@ -18,11 +18,7 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-sns', 'SNS', 26568),
   new ServicePackage('mypy-boto3-kms', 'KMS', 24053),
   new ServicePackage('mypy-boto3-ecs', 'ECS', 21186),
-  new ServicePackage(
-    'mypy-boto3-cognito-idp',
-    'CognitoIdentityProvider',
-    16339
-  ),
+  new ServicePackage('mypy-boto3-cognito-idp', 'CognitoIdentityProvider', 16339),
   new ServicePackage('mypy-boto3-ses', 'SES', 16255),
   new ServicePackage('mypy-boto3-route53', 'Route53', 16124),
   new ServicePackage('mypy-boto3-ecr', 'ECR', 16099),
@@ -44,11 +40,7 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-es', 'ElasticsearchService', 6786),
   new ServicePackage('mypy-boto3-codedeploy', 'CodeDeploy', 6644),
   new ServicePackage('mypy-boto3-redshift', 'Redshift', 5986),
-  new ServicePackage(
-    'mypy-boto3-application-autoscaling',
-    'ApplicationAutoScaling',
-    5970
-  ),
+  new ServicePackage('mypy-boto3-application-autoscaling', 'ApplicationAutoScaling', 5970),
   new ServicePackage('mypy-boto3-elasticache', 'ElastiCache', 5754),
   new ServicePackage('mypy-boto3-emr', 'EMR', 5599),
   new ServicePackage('mypy-boto3-datapipeline', 'DataPipeline', 5576),
@@ -57,11 +49,7 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-accessanalyzer', 'AccessAnalyzer', 5179),
   new ServicePackage('mypy-boto3-ce', 'CostExplorer', 5062),
   new ServicePackage('mypy-boto3-greengrass', 'Greengrass', 4969),
-  new ServicePackage(
-    'mypy-boto3-resourcegroupstaggingapi',
-    'ResourceGroupsTaggingAPI',
-    4898
-  ),
+  new ServicePackage('mypy-boto3-resourcegroupstaggingapi', 'ResourceGroupsTaggingAPI', 4898),
   new ServicePackage('mypy-boto3-securityhub', 'SecurityHub', 4848),
   new ServicePackage('mypy-boto3-organizations', 'Organizations', 4827),
   new ServicePackage('mypy-boto3-eks', 'EKS', 4781),
@@ -77,27 +65,15 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-service-quotas', 'ServiceQuotas', 4413),
   new ServicePackage('mypy-boto3-dms', 'DatabaseMigrationService', 4362),
   new ServicePackage('mypy-boto3-medialive', 'MediaLive', 4344),
-  new ServicePackage(
-    'mypy-boto3-meteringmarketplace',
-    'MarketplaceMetering',
-    4329
-  ),
+  new ServicePackage('mypy-boto3-meteringmarketplace', 'MarketplaceMetering', 4329),
   new ServicePackage('mypy-boto3-timestream-write', 'TimestreamWrite', 4324),
   new ServicePackage('mypy-boto3-chime', 'Chime', 4322),
-  new ServicePackage(
-    'mypy-boto3-ec2-instance-connect',
-    'EC2InstanceConnect',
-    4309
-  ),
+  new ServicePackage('mypy-boto3-ec2-instance-connect', 'EC2InstanceConnect', 4309),
   new ServicePackage('mypy-boto3-transcribe', 'TranscribeService', 4287),
   new ServicePackage('mypy-boto3-apigatewayv2', 'ApiGatewayV2', 4278),
   new ServicePackage('mypy-boto3-comprehend', 'Comprehend', 4254),
   new ServicePackage('mypy-boto3-snowball', 'Snowball', 4191),
-  new ServicePackage(
-    'mypy-boto3-apigatewaymanagementapi',
-    'ApiGatewayManagementApi',
-    4183
-  ),
+  new ServicePackage('mypy-boto3-apigatewaymanagementapi', 'ApiGatewayManagementApi', 4183),
   new ServicePackage('mypy-boto3-elb', 'ElasticLoadBalancing', 4154),
   new ServicePackage('mypy-boto3-codebuild', 'CodeBuild', 4148),
   new ServicePackage('mypy-boto3-sso-oidc', 'SSOOIDC', 4148),
@@ -107,11 +83,7 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-amplify', 'Amplify', 4130),
   new ServicePackage('mypy-boto3-sagemaker-runtime', 'SageMakerRuntime', 4127),
   new ServicePackage('mypy-boto3-compute-optimizer', 'ComputeOptimizer', 4113),
-  new ServicePackage(
-    'mypy-boto3-marketplace-entitlement',
-    'MarketplaceEntitlementService',
-    4079
-  ),
+  new ServicePackage('mypy-boto3-marketplace-entitlement', 'MarketplaceEntitlementService', 4079),
   new ServicePackage('mypy-boto3-rds-data', 'RDSDataService', 4060),
   new ServicePackage('mypy-boto3-mediaconvert', 'MediaConvert', 4059),
   new ServicePackage('mypy-boto3-codepipeline', 'CodePipeline', 4053),
@@ -145,25 +117,13 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-ebs', 'EBS', 3767),
   new ServicePackage('mypy-boto3-workspaces', 'WorkSpaces', 3766),
   new ServicePackage('mypy-boto3-codecommit', 'CodeCommit', 3765),
-  new ServicePackage(
-    'mypy-boto3-application-insights',
-    'ApplicationInsights',
-    3764
-  ),
+  new ServicePackage('mypy-boto3-application-insights', 'ApplicationInsights', 3764),
   new ServicePackage('mypy-boto3-clouddirectory', 'CloudDirectory', 3764),
   new ServicePackage('mypy-boto3-support', 'Support', 3759),
   new ServicePackage('mypy-boto3-codestar', 'CodeStar', 3755),
   new ServicePackage('mypy-boto3-cloudsearch', 'CloudSearch', 3751),
-  new ServicePackage(
-    'mypy-boto3-iot1click-projects',
-    'IoT1ClickProjects',
-    3751
-  ),
-  new ServicePackage(
-    'mypy-boto3-codestar-notifications',
-    'CodeStarNotifications',
-    3749
-  ),
+  new ServicePackage('mypy-boto3-iot1click-projects', 'IoT1ClickProjects', 3751),
+  new ServicePackage('mypy-boto3-codestar-notifications', 'CodeStarNotifications', 3749),
   new ServicePackage('mypy-boto3-importexport', 'ImportExport', 3749),
   new ServicePackage('mypy-boto3-storagegateway', 'StorageGateway', 3745),
   new ServicePackage('mypy-boto3-swf', 'SWF', 3745),
@@ -196,34 +156,18 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-waf', 'WAF', 3705),
   new ServicePackage('mypy-boto3-guardduty', 'GuardDuty', 3704),
   new ServicePackage('mypy-boto3-robomaker', 'RoboMaker', 3703),
-  new ServicePackage(
-    'mypy-boto3-kinesisanalyticsv2',
-    'KinesisAnalyticsV2',
-    3702
-  ),
+  new ServicePackage('mypy-boto3-kinesisanalyticsv2', 'KinesisAnalyticsV2', 3702),
   new ServicePackage('mypy-boto3-route53resolver', 'Route53Resolver', 3702),
   new ServicePackage('mypy-boto3-workdocs', 'WorkDocs', 3702),
   new ServicePackage('mypy-boto3-cloudsearchdomain', 'CloudSearchDomain', 3700),
   new ServicePackage('mypy-boto3-iotevents', 'IoTEvents', 3700),
-  new ServicePackage(
-    'mypy-boto3-serverlessrepo',
-    'ServerlessApplicationRepository',
-    3698
-  ),
+  new ServicePackage('mypy-boto3-serverlessrepo', 'ServerlessApplicationRepository', 3698),
   new ServicePackage('mypy-boto3-iotevents-data', 'IoTEventsData', 3697),
   new ServicePackage('mypy-boto3-autoscaling-plans', 'AutoScalingPlans', 3696),
   new ServicePackage('mypy-boto3-lex-runtime', 'LexRuntimeService', 3696),
-  new ServicePackage(
-    'mypy-boto3-workmailmessageflow',
-    'WorkMailMessageFlow',
-    3696
-  ),
+  new ServicePackage('mypy-boto3-workmailmessageflow', 'WorkMailMessageFlow', 3696),
   new ServicePackage('mypy-boto3-appstream', 'AppStream', 3692),
-  new ServicePackage(
-    'mypy-boto3-personalize-events',
-    'PersonalizeEvents',
-    3691
-  ),
+  new ServicePackage('mypy-boto3-personalize-events', 'PersonalizeEvents', 3691),
   new ServicePackage('mypy-boto3-workmail', 'WorkMail', 3691),
   new ServicePackage('mypy-boto3-pi', 'PI', 3689),
   new ServicePackage('mypy-boto3-cloudhsmv2', 'CloudHSMV2', 3687),
@@ -236,23 +180,11 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-mobile', 'Mobile', 3680),
   new ServicePackage('mypy-boto3-sms', 'SMS', 3680),
   new ServicePackage('mypy-boto3-frauddetector', 'FraudDetector', 3679),
-  new ServicePackage(
-    'mypy-boto3-iot1click-devices',
-    'IoT1ClickDevicesService',
-    3679
-  ),
-  new ServicePackage(
-    'mypy-boto3-kinesis-video-archived-media',
-    'KinesisVideoArchivedMedia',
-    3678
-  ),
+  new ServicePackage('mypy-boto3-iot1click-devices', 'IoT1ClickDevicesService', 3679),
+  new ServicePackage('mypy-boto3-kinesis-video-archived-media', 'KinesisVideoArchivedMedia', 3678),
   new ServicePackage('mypy-boto3-fms', 'FMS', 3677),
   new ServicePackage('mypy-boto3-groundstation', 'GroundStation', 3677),
-  new ServicePackage(
-    'mypy-boto3-sagemaker-a2i-runtime',
-    'AugmentedAIRuntime',
-    3677
-  ),
+  new ServicePackage('mypy-boto3-sagemaker-a2i-runtime', 'AugmentedAIRuntime', 3677),
   new ServicePackage('mypy-boto3-dataexchange', 'DataExchange', 3672),
   new ServicePackage('mypy-boto3-neptune', 'Neptune', 3671),
   new ServicePackage('mypy-boto3-mgh', 'MigrationHub', 3670),
@@ -260,11 +192,7 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-forecast', 'ForecastService', 3667),
   new ServicePackage('mypy-boto3-cloudhsm', 'CloudHSM', 3666),
   new ServicePackage('mypy-boto3-alexaforbusiness', 'AlexaForBusiness', 3665),
-  new ServicePackage(
-    'mypy-boto3-discovery',
-    'ApplicationDiscoveryService',
-    3664
-  ),
+  new ServicePackage('mypy-boto3-discovery', 'ApplicationDiscoveryService', 3664),
   new ServicePackage('mypy-boto3-docdb', 'DocDB', 3664),
   new ServicePackage('mypy-boto3-mediastore-data', 'MediaStoreData', 3664),
   new ServicePackage('mypy-boto3-dlm', 'DLM', 3663),
@@ -273,30 +201,14 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-license-manager', 'LicenseManager', 3661),
   new ServicePackage('mypy-boto3-pinpoint-sms-voice', 'PinpointSMSVoice', 3661),
   new ServicePackage('mypy-boto3-comprehendmedical', 'ComprehendMedical', 3660),
-  new ServicePackage(
-    'mypy-boto3-iotsecuretunneling',
-    'IoTSecureTunneling',
-    3659
-  ),
+  new ServicePackage('mypy-boto3-iotsecuretunneling', 'IoTSecureTunneling', 3659),
   new ServicePackage('mypy-boto3-mediastore', 'MediaStore', 3659),
-  new ServicePackage(
-    'mypy-boto3-kinesis-video-signaling',
-    'KinesisVideoSignalingChannels',
-    3656
-  ),
-  new ServicePackage(
-    'mypy-boto3-personalize-runtime',
-    'PersonalizeRuntime',
-    3656
-  ),
+  new ServicePackage('mypy-boto3-kinesis-video-signaling', 'KinesisVideoSignalingChannels', 3656),
+  new ServicePackage('mypy-boto3-personalize-runtime', 'PersonalizeRuntime', 3656),
   new ServicePackage('mypy-boto3-kinesisvideo', 'KinesisVideo', 3644),
   new ServicePackage('mypy-boto3-forecastquery', 'ForecastQueryService', 3641),
   new ServicePackage('mypy-boto3-kinesisanalytics', 'KinesisAnalytics', 3641),
-  new ServicePackage(
-    'mypy-boto3-kinesis-video-media',
-    'KinesisVideoMedia',
-    3639
-  ),
+  new ServicePackage('mypy-boto3-kinesis-video-media', 'KinesisVideoMedia', 3639),
   new ServicePackage(
     'mypy-boto3-marketplacecommerceanalytics',
     'MarketplaceCommerceAnalytics',
@@ -306,31 +218,15 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-schemas', 'Schemas', 3637),
   new ServicePackage('mypy-boto3-codeguruprofiler', 'CodeGuruProfiler', 3634),
   new ServicePackage('mypy-boto3-iot-jobs-data', 'IoTJobsDataPlane', 3629),
-  new ServicePackage(
-    'mypy-boto3-marketplace-catalog',
-    'MarketplaceCatalog',
-    3625
-  ),
+  new ServicePackage('mypy-boto3-marketplace-catalog', 'MarketplaceCatalog', 3625),
   new ServicePackage('mypy-boto3-detective', 'Detective', 3620),
-  new ServicePackage(
-    'mypy-boto3-migrationhub-config',
-    'MigrationHubConfig',
-    3618
-  ),
+  new ServicePackage('mypy-boto3-migrationhub-config', 'MigrationHubConfig', 3618),
   new ServicePackage('mypy-boto3-elastic-inference', 'ElasticInference', 3617),
   new ServicePackage('mypy-boto3-imagebuilder', 'imagebuilder', 3615),
-  new ServicePackage(
-    'mypy-boto3-connectparticipant',
-    'ConnectParticipant',
-    3609
-  ),
+  new ServicePackage('mypy-boto3-connectparticipant', 'ConnectParticipant', 3609),
   new ServicePackage('mypy-boto3-kendra', 'kendra', 3605),
   new ServicePackage('mypy-boto3-outposts', 'Outposts', 3590),
-  new ServicePackage(
-    'mypy-boto3-codestar-connections',
-    'CodeStarconnections',
-    3568
-  ),
+  new ServicePackage('mypy-boto3-codestar-connections', 'CodeStarconnections', 3568),
   new ServicePackage('mypy-boto3-timestream-query', 'TimestreamQuery', 3531),
   new ServicePackage('mypy-boto3-codeartifact', 'CodeArtifact', 3474),
   new ServicePackage('mypy-boto3-synthetics', 'Synthetics', 3374),
@@ -338,11 +234,7 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-location', 'LocationService', 3357),
   new ServicePackage('mypy-boto3-mwaa', 'MWAA', 3333),
   new ServicePackage('mypy-boto3-macie2', 'Macie2', 3312),
-  new ServicePackage(
-    'mypy-boto3-redshift-data',
-    'RedshiftDataAPIService',
-    3285
-  ),
+  new ServicePackage('mypy-boto3-redshift-data', 'RedshiftDataAPIService', 3285),
   new ServicePackage('mypy-boto3-braket', 'Braket', 3177),
   new ServicePackage('mypy-boto3-appflow', 'Appflow', 3165),
   new ServicePackage('mypy-boto3-identitystore', 'IdentityStore', 3149),
@@ -350,11 +242,7 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-sso-admin', 'SSOAdmin', 3121),
   new ServicePackage('mypy-boto3-s3outposts', 'S3Outposts', 3034),
   new ServicePackage('mypy-boto3-devops-guru', 'DevOpsGuru', 3013),
-  new ServicePackage(
-    'mypy-boto3-servicecatalog-appregistry',
-    'AppRegistry',
-    2992
-  ),
+  new ServicePackage('mypy-boto3-servicecatalog-appregistry', 'AppRegistry', 2992),
   new ServicePackage('mypy-boto3-network-firewall', 'NetworkFirewall', 2991),
   new ServicePackage(
     'mypy-boto3-sagemaker-featurestore-runtime',
@@ -364,11 +252,7 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-ecr-public', 'ECRPublic', 2966),
   new ServicePackage('mypy-boto3-amplifybackend', 'AmplifyBackend', 2959),
   new ServicePackage('mypy-boto3-databrew', 'GlueDataBrew', 2943),
-  new ServicePackage(
-    'mypy-boto3-appintegrations',
-    'AppIntegrationsService',
-    2935
-  ),
+  new ServicePackage('mypy-boto3-appintegrations', 'AppIntegrationsService', 2935),
   new ServicePackage('mypy-boto3-iotwireless', 'IoTWireless', 2934),
   new ServicePackage('mypy-boto3-iotdeviceadvisor', 'IoTDeviceAdvisor', 2925),
   new ServicePackage('mypy-boto3-lookoutvision', 'LookoutforVision', 2923),
@@ -378,11 +262,7 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-auditmanager', 'AuditManager', 2894),
   new ServicePackage('mypy-boto3-amp', 'PrometheusService', 2887),
   new ServicePackage('mypy-boto3-healthlake', 'HealthLake', 2887),
-  new ServicePackage(
-    'mypy-boto3-connect-contact-lens',
-    'ConnectContactLens',
-    2886
-  ),
+  new ServicePackage('mypy-boto3-connect-contact-lens', 'ConnectContactLens', 2886),
   new ServicePackage('mypy-boto3-wellarchitected', 'WellArchitected', 2886),
   new ServicePackage('mypy-boto3-iotfleethub', 'IoTFleetHub', 2875),
   new ServicePackage('mypy-boto3-lexv2-models', 'LexModelsV2', 2745),
@@ -397,38 +277,18 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-ssm-contacts', 'SSMContacts', 2313),
   new ServicePackage('mypy-boto3-ssm-incidents', 'SSMIncidents', 2303),
   new ServicePackage('mypy-boto3-apprunner', 'AppRunner', 2271),
-  new ServicePackage(
-    'mypy-boto3-applicationcostprofiler',
-    'ApplicationCostProfiler',
-    2269
-  ),
+  new ServicePackage('mypy-boto3-applicationcostprofiler', 'ApplicationCostProfiler', 2269),
   new ServicePackage('mypy-boto3-proton', 'Proton', 2215),
   new ServicePackage(
     'mypy-boto3-route53-recovery-control-config',
     'Route53RecoveryControlConfig',
     2080
   ),
-  new ServicePackage(
-    'mypy-boto3-route53-recovery-readiness',
-    'Route53RecoveryReadiness',
-    2080
-  ),
-  new ServicePackage(
-    'mypy-boto3-route53-recovery-cluster',
-    'Route53RecoveryCluster',
-    2077
-  ),
-  new ServicePackage(
-    'mypy-boto3-chime-sdk-messaging',
-    'ChimeSDKMessaging',
-    2049
-  ),
+  new ServicePackage('mypy-boto3-route53-recovery-readiness', 'Route53RecoveryReadiness', 2080),
+  new ServicePackage('mypy-boto3-route53-recovery-cluster', 'Route53RecoveryCluster', 2077),
+  new ServicePackage('mypy-boto3-chime-sdk-messaging', 'ChimeSDKMessaging', 2049),
   new ServicePackage('mypy-boto3-chime-sdk-identity', 'ChimeSDKIdentity', 2046),
-  new ServicePackage(
-    'mypy-boto3-snow-device-management',
-    'SnowDeviceManagement',
-    2017
-  ),
+  new ServicePackage('mypy-boto3-snow-device-management', 'SnowDeviceManagement', 2017),
   new ServicePackage('mypy-boto3-opensearch', 'OpenSearchService', 1896),
   new ServicePackage('mypy-boto3-memorydb', 'MemoryDB', 1576),
   new ServicePackage('mypy-boto3-kafkaconnect', 'KafkaConnect', 1378),

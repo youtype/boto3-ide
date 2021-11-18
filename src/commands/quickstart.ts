@@ -13,16 +13,10 @@ export default async function handle(context: ExtensionContext): Promise<void> {
   }
 
   const servicePackages = await getServicePackages(context)
-  const pylanceEnabled =
-    workspace.getConfiguration('python').get('languageServer') === 'Pylance'
-  const autoCompleteEnabled = servicePackages.find(
-    (x) => x.installed && x.isMaster
-  )
-    ? true
-    : false
+  const pylanceEnabled = workspace.getConfiguration('python').get('languageServer') === 'Pylance'
+  const autoCompleteEnabled = servicePackages.find((x) => x.installed && x.isMaster) ? true : false
   const typeCheckingEnabled =
-    workspace.getConfiguration('python').get('analysis.typeCheckingMode') !==
-    'off'
+    workspace.getConfiguration('python').get('analysis.typeCheckingMode') !== 'off'
   const messageParts = [
     `${pylanceEnabled ? '✓' : '✗'} Pylance`,
     `${autoCompleteEnabled ? '✓' : '✗'} IntelliSense`,
@@ -42,9 +36,7 @@ export default async function handle(context: ExtensionContext): Promise<void> {
   )
   if (action === 'Enable Pylance' || action === 'Enable Type Checking') {
     env.openExternal(
-      Uri.parse(
-        'https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance'
-      )
+      Uri.parse('https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance')
     )
   }
   if (action === 'Modify') {

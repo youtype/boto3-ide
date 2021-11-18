@@ -14,13 +14,9 @@ export default class PoetryInstaller extends BaseInstaller {
     dev: boolean
   ): Promise<void> {
     const packageName = this.buildPackageName(name, extras)
-    const versionConstraint = version
-      ? this.buildVersionConstraint(version)
-      : '@latest'
+    const versionConstraint = version ? this.buildVersionConstraint(version) : '@latest'
     const installerCmd = await this.getInstallerCmd()
-    const cmd = `${installerCmd} add -n ${
-      dev ? '--dev' : ''
-    } "${packageName}${versionConstraint}"`
+    const cmd = `${installerCmd} add -n ${dev ? '--dev' : ''} "${packageName}${versionConstraint}"`
     await this.exec(cmd)
   }
 

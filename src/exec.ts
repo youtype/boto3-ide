@@ -4,9 +4,7 @@ import { window } from 'vscode'
 
 const exec = promisify(_exec)
 
-export default async function (
-  cmd: string
-): Promise<{ stdout: string; stderr: string }> {
+export default async function (cmd: string): Promise<{ stdout: string; stderr: string }> {
   try {
     const { stderr, stdout } = await exec(cmd)
     return { stderr, stdout }

@@ -1,4 +1,4 @@
-import { window, ProgressLocation, Progress, QuickPickItem, ExtensionContext } from 'vscode';
+import { window, ProgressLocation, Progress, ExtensionContext } from 'vscode';
 import { servicePackages } from './servicePackages';
 import { Boto3StubsPackage, PypiPackage } from './pypi';
 import { createSmartInstaller } from './installers/smart';
@@ -47,18 +47,4 @@ export async function getServicePackages(context: ExtensionContext, recommended:
         masterPackage,
         ...servicePackages,
     ];
-}
-
-export class PypiPackageItem implements QuickPickItem {
-    label: string;
-    description: string;
-    detail: string;
-    picked: boolean;
-
-    constructor(public pypiPackage: PypiPackage, picked: boolean) {
-        this.label = pypiPackage.getLabel().trim();
-        this.description = pypiPackage.getDescription().trim();
-        this.detail = pypiPackage.getDetail().trim();
-        this.picked = picked;
-    }
 }

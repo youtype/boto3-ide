@@ -1,24 +1,13 @@
 import PoetryInstaller from './poetry';
 import PipInstaller from './pip';
 import { PypiPackage } from '../pypi';
-import { window, extensions, workspace, ExtensionContext, QuickPickItem } from 'vscode';
+import { window, extensions, workspace, ExtensionContext } from 'vscode';
 import PipPackage from './pipPackage';
 import PipenvInstaller from './pipenv';
 import { BaseInstaller } from './base';
 import { showProgress } from '../utils';
-import { INSTALLER } from '../constants';
-
-export class InstallerItem implements QuickPickItem {
-    label: string;
-    detail: string;
-    picked: boolean;
-
-    constructor(public installer: BaseInstaller, picked: boolean) {
-        this.label = installer.name;
-        this.detail = installer.description;
-        this.picked = picked;
-    }
-}
+import { SETTING_INSTALLER } from '../constants';
+import { InstallerItem } from '../quickPick';
 
 export class SmartInstaller {
     pythonPaths: string[];
@@ -57,7 +46,7 @@ export class SmartInstaller {
         const installers = this.getInstallers();
         if (!installers.length) { return undefined; }
         if (installers.length === 1) { return installers[0]; }
-        const selectedInstallerName: string = this.context.workspaceState.get(INSTALLER) || '';
+        const selectedInstallerName: string = this.context.workspaceState.get(SETTING_INSTALLER) || '';
         let selectedInstaller = installers.find(x => x.name === selectedInstallerName);
         if (selectedInstaller) { return selectedInstaller; }
 
@@ -69,8 +58,12 @@ export class SmartInstaller {
     async selectInstaller(installers: BaseInstaller[]) {
         const quickPick = window.createQuickPick<InstallerItem>();
         quickPick.placeholder = 'Select installer';
-        const savedInstallerName = this.context.workspaceState.get(INSTALLER) || "";
-        quickPick.items = installers.map(x => new InstallerItem(x, x.name === savedInstallerName));
+        const savedInstallerName = this.context.workspaceState.get(SETTING_INSTALLER) || "";
+
+        const installerItems = installers.map(x => new InstallerItem(x, x.name === savedInstallerName));
+        installerItems.sort((a, b) => (b.picked ? 1 : 0) - (a.picked ? 1 : 0));
+
+        quickPick.items = installerItems;
         quickPick.show();
 
         const selectedInstaller: BaseInstaller | null = await new Promise(resolve => {
@@ -86,7 +79,7 @@ export class SmartInstaller {
         });
 
         if (selectedInstaller) {
-            this.context.workspaceState.update(INSTALLER, selectedInstaller.name);
+            this.context.workspaceState.update(SETTING_INSTALLER, selectedInstaller.name);
             return selectedInstaller;
         }
     }

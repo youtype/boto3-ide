@@ -1,5 +1,6 @@
-import { getServicePackages, PypiPackageItem } from "../utils";
+import { getServicePackages } from "../utils";
 import { window, env, Uri, ExtensionContext } from "vscode";
+import { PypiPackageItem } from '../quickPick';
 
 export default async function handle(context: ExtensionContext): Promise<void> {
     const quickPick = window.createQuickPick<PypiPackageItem>();

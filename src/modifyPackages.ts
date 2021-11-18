@@ -1,8 +1,9 @@
-import { pluralize, PypiPackageItem } from './utils';
+import { pluralize } from './utils';
 import { ExtensionContext, window } from "vscode";
 
 import { createSmartInstaller } from './installers/smart';
 import { PypiPackage } from './pypi';
+import { PypiPackageItem } from './quickPick';
 import { NAME } from './constants';
 
 function getSuccessMessage(selected: readonly PypiPackageItem[]) {

@@ -1,5 +1,5 @@
 import { ExtensionContext, window } from 'vscode';
-import { NAME, INITIALIZED } from '../constants';
+import { NAME, SETTING_INITIALIZED, SETTING_SILENCED } from '../constants';
 import PipPackage from '../installers/pipPackage';
 import { createSmartInstaller } from '../installers/smart';
 import quickstartHandler from './quickstart';
@@ -14,7 +14,9 @@ async function getPackages(context: ExtensionContext): Promise<PipPackage[]> {
 }
 
 export default async function handle(context: ExtensionContext): Promise<void> {
-    const initialized = context.workspaceState.get(INITIALIZED);
+    const silenced = context.globalState.get(SETTING_SILENCED);
+    if (silenced) { return; }
+    const initialized = context.workspaceState.get(SETTING_INITIALIZED);
     if (initialized) { return; }
 
     const pipPackages = await getPackages(context);
@@ -25,9 +27,13 @@ export default async function handle(context: ExtensionContext): Promise<void> {
     const response = await window.showInformationMessage(
         `This project uses boto3 with no ${NAME}.`,
         `Install ${NAME}`,
-        'Maybe later'
+        'Maybe later',
+        'Do not show this again'
     );
-    context.workspaceState.update(INITIALIZED, 'true');
+    context.workspaceState.update(SETTING_INITIALIZED, 'true');
+    if (response === 'Do not show this again') {
+        context.globalState.update(SETTING_SILENCED, 'true');
+    }
     if (response === 'Install it now') {
         await quickstartHandler(context);
     }

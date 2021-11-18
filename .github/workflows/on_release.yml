@@ -1,4 +1,4 @@
-name: Create Release Pull Request
+name: Release new version
 "on":
   release:
     types:
@@ -54,11 +54,18 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ steps.release.outputs.target }}
+      - name: Get new version
+        id: version
+        uses: vemel/nextversion@0.1.1
+        with:
+          path: ./package.json
+          type: semver
+          result: ${{ steps.release.outputs.tag }}
       - name: Set version
         id: set-version
         run: |
           npm config set git-tag-version false
-          npm version ${{ steps.release.outputs.tag }} --allow-same-version
+          npm version ${{ steps.version.outputs.result }} --allow-same-version
       - name: Add new release to CHANGELOG.md
         id: changelog
         uses: vemel/nextchange@0.1.0
@@ -77,8 +84,12 @@ jobs:
           clear: true
       - name: Commit changes
         id: commit
+        env:
+          VERSION: ${{ steps.version.outputs.result }}
         run: |
-          git commit -am "Bump version to $VERSION"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -am "Bump version to ${VERSION}"
           git push
       - name: Publish to Marketplace
         env:

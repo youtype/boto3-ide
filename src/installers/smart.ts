@@ -8,6 +8,7 @@ import { BaseInstaller } from './base'
 import { showProgress, getWorkDir } from '../utils'
 import { SETTING_INSTALLER } from '../constants'
 import { InstallerItem } from '../quickPick'
+import CondaInstaller from './conda'
 
 export class SmartInstaller {
   pythonPaths: string[]
@@ -16,6 +17,7 @@ export class SmartInstaller {
   poetry: PoetryInstaller
   pip: PipInstaller
   pipenv: PipenvInstaller
+  conda: CondaInstaller
   installers: BaseInstaller[]
   installedPackages: PipPackage[]
   context: ExtensionContext
@@ -28,7 +30,8 @@ export class SmartInstaller {
     this.poetry = new PoetryInstaller(this.pythonPaths, this.workDir)
     this.pip = new PipInstaller(this.pythonPaths, this.workDir)
     this.pipenv = new PipenvInstaller(this.pythonPaths, this.workDir)
-    this.installers = [this.poetry, this.pipenv, this.pip]
+    this.conda = new CondaInstaller(this.pythonPaths, this.workDir)
+    this.installers = [this.poetry, this.pipenv, this.pip, this.conda]
     this.installedPackages = []
   }
 

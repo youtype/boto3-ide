@@ -11,6 +11,7 @@ export abstract class BaseInstaller {
   mainPythonPath: string
   workDir: string
   installerCmd: string
+  supportsExtras = true
 
   constructor(pythonPaths: string[], workDir: string) {
     this.pythonPaths = pythonPaths
@@ -25,7 +26,7 @@ export abstract class BaseInstaller {
     }
     const commands: string[] = [
       workspace.getConfiguration('python').get(`${this.name}Path`) || '',
-      ...this.pythonPaths
+      ...this.pythonPaths.map((x) => `${x} -m ${this.name}`)
     ]
     for (const command of commands) {
       if (!command) {
@@ -59,6 +60,8 @@ export abstract class BaseInstaller {
   getLockFileName(): string {
     return ''
   }
+
+  abstract isPresent(): boolean
 
   isInUse(): boolean {
     if (!this.lockFileExists()) {

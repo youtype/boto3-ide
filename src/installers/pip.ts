@@ -4,6 +4,10 @@ export default class PipInstaller extends BaseInstaller {
   name = 'pip'
   description = 'Installs packages directly without lockfile.'
 
+  isPresent(): boolean {
+    return true
+  }
+
   async installPackage(
     name: string,
     version: string,

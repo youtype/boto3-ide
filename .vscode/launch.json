@@ -11,7 +11,7 @@
 			"request": "launch",
 			"args": [
 				"--extensionDevelopmentPath=${workspaceFolder}",
-				"${workspaceFolder}/../pipenvproj/",
+				"${workspaceFolder}/../test/condaproject/",
 			],
 			"outFiles": [
 				"${workspaceFolder}/out/**/*.js"

@@ -4,6 +4,6 @@ import { createSmartInstaller } from '../installers/smart'
 
 export default async function handle(context: ExtensionContext): Promise<BaseInstaller | void> {
   const smartInstaller = await createSmartInstaller(context)
-  const installers = smartInstaller.getInstallers()
+  const installers = smartInstaller.getPresentInstallers()
   return await smartInstaller.selectInstaller(installers)
 }

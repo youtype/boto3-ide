@@ -16,6 +16,7 @@ export class SmartInstaller {
   poetry: PoetryInstaller
   pip: PipInstaller
   pipenv: PipenvInstaller
+  installers: BaseInstaller[]
   installedPackages: PipPackage[]
   context: ExtensionContext
 
@@ -27,23 +28,16 @@ export class SmartInstaller {
     this.poetry = new PoetryInstaller(this.pythonPaths, this.workDir)
     this.pip = new PipInstaller(this.pythonPaths, this.workDir)
     this.pipenv = new PipenvInstaller(this.pythonPaths, this.workDir)
+    this.installers = [this.poetry, this.pipenv, this.pip]
     this.installedPackages = []
   }
 
-  getInstallers(): BaseInstaller[] {
-    let result = []
-    if (this.poetry.lockFileExists()) {
-      result.push(this.poetry)
-    }
-    if (this.pipenv.lockFileExists()) {
-      result.push(this.pipenv)
-    }
-    result.push(this.pip)
-    return result
+  getPresentInstallers(): BaseInstaller[] {
+    return this.installers.filter((x) => x.isPresent())
   }
 
   async getInstaller(): Promise<BaseInstaller | undefined> {
-    const installers = this.getInstallers()
+    const installers = this.getPresentInstallers()
     if (!installers.length) {
       return undefined
     }
@@ -133,14 +127,14 @@ export class SmartInstaller {
     const extraPackages = packages.filter((x) => !x.isMaster)
 
     await showProgress(`Installing packages...`, async (progress) => {
-      if (masterPackage) {
+      if (installer.supportsExtras && masterPackage) {
         const extras = extraPackages.map((x) => x.getExtraName())
         progress.report({
           message: `Installing ${extraPackages.length} services with ${installer.name}...`
         })
         await installer.installPackage(masterPackage.moduleName, version, extras, dev)
       } else {
-        for (const extraPackage of extraPackages) {
+        for (const extraPackage of packages) {
           progress.report({
             message: `Installing ${extraPackage.getLabel()} service with ${installer.name}...`
           })

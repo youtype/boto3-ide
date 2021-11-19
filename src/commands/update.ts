@@ -17,10 +17,7 @@ export default async function handle(context: ExtensionContext): Promise<void> {
     const smartInstaller = await createSmartInstaller(context)
     const action = await window.showInformationMessage(
       `New boto3 version ${latestBoto3Version} available!`,
-      `Update with ${smartInstaller
-        .getInstallers()
-        .map((x) => x.name)
-        .join(' / ')}`
+      'Update'
     )
     if (!action) {
       return

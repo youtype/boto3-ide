@@ -1,5 +1,3 @@
-import * as path from 'path'
-import * as fs from 'fs'
 import { BaseInstaller } from './base'
 
 export default class PipenvInstaller extends BaseInstaller {
@@ -31,5 +29,9 @@ export default class PipenvInstaller extends BaseInstaller {
 
   getLockFileName(): string {
     return 'Pipfile.lock'
+  }
+
+  isPresent(): boolean {
+    return this.lockFileExists()
   }
 }

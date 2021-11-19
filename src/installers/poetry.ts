@@ -29,4 +29,8 @@ export default class PoetryInstaller extends BaseInstaller {
   getLockFileName(): string {
     return 'poetry.lock'
   }
+
+  isPresent(): boolean {
+    return this.lockFileExists()
+  }
 }

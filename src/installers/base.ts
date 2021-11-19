@@ -108,8 +108,14 @@ export abstract class BaseInstaller {
   }
 
   async listPackages(): Promise<PipPackage[]> {
-    const output = (await exec(`${this.mainPythonPath} -m pip freeze`)).stdout
-    return output.split(/\r?\n/).map((x) => this.parsePackageData(x))
+    const cmd = `${this.mainPythonPath} -m pip freeze`
+    try {
+      const output = (await exec(cmd)).stdout
+      return output.split(/\r?\n/).map((x) => this.parsePackageData(x))
+    } catch {
+      console.error(`Cannot list packages with ${cmd}`)
+      return []
+    }
   }
 
   async exec(cmd: string): Promise<{ stdout: string; stderr: string }> {

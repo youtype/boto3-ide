@@ -49,6 +49,12 @@ jobs:
             core.setOutput('name', release.name);
             core.setOutput('body', release.body);
             return true;
+      - name: Set up Node
+        id: setup-node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          registry-url: https://registry.npmjs.org/
       - name: Checkout Release target branch
         id: checkout
         uses: actions/checkout@v2

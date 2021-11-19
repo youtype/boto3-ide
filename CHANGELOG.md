@@ -4,6 +4,13 @@ All notable changes to the `boto3-ide` extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.4.2]
+### Fixed
+- Auto-discover respects `.gitignore`
+- `.venv` folder is scanned if it is not gitignored
+- `pipenv`/`poetry` were not discovered properly in Python path sometimes
+- Error if `pip` is not available
+
 ## [0.4.1]
 ### Fixed
 - Error on non-readable file in the workspace

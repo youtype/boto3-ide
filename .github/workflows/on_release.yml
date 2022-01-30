@@ -104,4 +104,4 @@ jobs:
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: |
-          npm run vsce publish
+          vsce publish

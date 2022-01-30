@@ -1,4 +1,4 @@
-import { showProgress, getServicePackages, getWorkDir } from '../utils'
+import { showProgress, getServicePackages, getWorkDirs } from '../utils'
 import { getOrInstallBoto3Version } from '../boto3'
 import modifyPackages from '../modifyPackages'
 import SourceScanner from '../sourceScanner'
@@ -11,7 +11,7 @@ export default async function handle(context: ExtensionContext): Promise<void> {
     return
   }
 
-  const sourceScanner = new SourceScanner(getWorkDir())
+  const sourceScanner = new SourceScanner(getWorkDirs())
 
   let servicePackages: PypiPackage[] = []
   await showProgress('Scanning workspace...', async (progress) => {

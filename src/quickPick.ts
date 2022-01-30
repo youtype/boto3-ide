@@ -11,7 +11,7 @@ export class InstallerItem implements QuickPickItem {
   constructor(public installer: BaseInstaller, picked: boolean) {
     this.label = installer.name
     this.detail = installer.description
-    this.description = picked ? '(selected)' : ''
+    this.description = `${installer.getWorkDir()} ${picked ? '(selected)' : ''}`
     this.picked = picked
   }
 }

@@ -6,7 +6,7 @@ import * as path from 'path'
 const SERVICE_RE = /(boto3|session)\.(client|resource)\(\s*['"]+(\S+)['"]+\s*\)/g
 
 export default class SourceScanner {
-  constructor(public workDir: string) {}
+  constructor(public workDirs: string[]) {}
   async findPythonFiles(): Promise<string[]> {
     const exclude = [
       ...Object.keys((await workspace.getConfiguration('search', null).get('exclude')) || {}),
@@ -17,22 +17,24 @@ export default class SourceScanner {
     const files = await workspace.findFiles('**/*.py', `{${exclude}}`)
     const result: string[] = []
 
-    const gitignorePath = path.join(this.workDir, '.gitignore')
-    const gitignoreExists = fs.existsSync(gitignorePath)
-    const filters = gitignoreExists ? (await this.readFile(gitignorePath)).split(/\r?\n/) : []
+    await this.workDirs.forEach(async (workDir) => {
+      const gitignorePath = path.join(workDir, '.gitignore')
+      const gitignoreExists = fs.existsSync(gitignorePath)
+      const filters = gitignoreExists ? (await this.readFile(gitignorePath)).split(/\r?\n/) : []
 
-    const gitignore = ignore()
-    gitignore.add(filters)
+      const gitignore = ignore()
+      gitignore.add(filters)
 
-    for (const file of files) {
-      const relativePath = path.relative(this.workDir, file.fsPath)
-      if (filters.length && gitignore.test(relativePath).ignored) {
-        console.log(`File ${relativePath} is gitignored`)
-        continue
+      for (const file of files) {
+        const relativePath = path.relative(workDir, file.fsPath)
+        if (filters.length && gitignore.test(relativePath).ignored) {
+          console.log(`File ${relativePath} is gitignored`)
+          continue
+        }
+        console.log(`Discovered ${relativePath}`)
+        result.push(file.fsPath)
       }
-      console.log(`Discovered ${relativePath}`)
-      result.push(file.fsPath)
-    }
+    })
     return result
   }
 

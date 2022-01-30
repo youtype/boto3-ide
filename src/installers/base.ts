@@ -9,14 +9,14 @@ export abstract class BaseInstaller {
   abstract description: string
   pythonPaths: string[]
   mainPythonPath: string
-  workDir: string
+  workDirs: string[]
   installerCmd: string
   supportsExtras = true
 
-  constructor(pythonPaths: string[], workDir: string) {
+  constructor(pythonPaths: string[], workDirs: string[]) {
     this.pythonPaths = pythonPaths
     this.mainPythonPath = pythonPaths[0]
-    this.workDir = workDir
+    this.workDirs = workDirs
     this.installerCmd = ''
   }
 
@@ -64,12 +64,10 @@ export abstract class BaseInstaller {
   abstract isPresent(): boolean
 
   isInUse(): boolean {
-    if (!this.lockFileExists()) {
+    const lockFilePath = this.getLockFilePath()
+    if (!lockFilePath) {
       return false
     }
-
-    const lockFileName = this.getLockFileName()
-    const lockFilePath = path.join(this.workDir, lockFileName)
 
     const data = fs.readFileSync(lockFilePath, { encoding: 'utf-8' })
     if (data.includes('"mypy-boto3')) {
@@ -81,13 +79,28 @@ export abstract class BaseInstaller {
     return false
   }
 
-  lockFileExists(): boolean {
+  getLockFilePath(): string | null {
     const lockFileName = this.getLockFileName()
     if (!lockFileName.length) {
-      return false
+      return null
     }
-    const lockFilePath = path.join(this.workDir, lockFileName)
-    return fs.existsSync(lockFilePath)
+    for (const workDir of this.workDirs) {
+      const lockFilePath = path.join(workDir, lockFileName)
+      if (fs.existsSync(lockFilePath)) return lockFilePath
+    }
+    return null
+  }
+
+  getWorkDir(): string {
+    const lockFileName = this.getLockFileName()
+    if (!lockFileName.length) {
+      return this.workDirs[0]
+    }
+    for (const workDir of this.workDirs) {
+      const lockFilePath = path.join(workDir, lockFileName)
+      if (fs.existsSync(lockFilePath)) return workDir
+    }
+    return this.workDirs[0]
   }
 
   buildVersionConstraint(version: string) {
@@ -121,7 +134,7 @@ export abstract class BaseInstaller {
   async exec(cmd: string): Promise<{ stdout: string; stderr: string }> {
     console.log(`Exec: ${cmd}`)
     const oldCwd = process.cwd()
-    process.chdir(this.workDir)
+    process.chdir(this.getWorkDir())
     try {
       return await exec(cmd)
     } catch {

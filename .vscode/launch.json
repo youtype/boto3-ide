@@ -11,7 +11,7 @@
 			"request": "launch",
 			"args": [
 				"--extensionDevelopmentPath=${workspaceFolder}",
-				"${workspaceFolder}/../test/condaproject/",
+				"${workspaceFolder}/../mypy_boto3_builder",
 			],
 			"outFiles": [
 				"${workspaceFolder}/out/**/*.js"

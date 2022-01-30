@@ -5,14 +5,14 @@ import { window, extensions, workspace, ExtensionContext } from 'vscode'
 import PipPackage from './pipPackage'
 import PipenvInstaller from './pipenv'
 import { BaseInstaller } from './base'
-import { showProgress, getWorkDir } from '../utils'
+import { showProgress, getWorkDirs } from '../utils'
 import { SETTING_INSTALLER } from '../constants'
 import { InstallerItem } from '../quickPick'
 
 export class SmartInstaller {
   pythonPaths: string[]
   mainPythonPath: string
-  workDir: string
+  workDirs: string[]
   poetry: PoetryInstaller
   pip: PipInstaller
   pipenv: PipenvInstaller
@@ -24,10 +24,10 @@ export class SmartInstaller {
     this.pythonPaths = pythonPaths
     this.context = context
     this.mainPythonPath = pythonPaths[0]
-    this.workDir = getWorkDir()
-    this.poetry = new PoetryInstaller(this.pythonPaths, this.workDir)
-    this.pip = new PipInstaller(this.pythonPaths, this.workDir)
-    this.pipenv = new PipenvInstaller(this.pythonPaths, this.workDir)
+    this.workDirs = getWorkDirs()
+    this.poetry = new PoetryInstaller(this.pythonPaths, this.workDirs)
+    this.pipenv = new PipenvInstaller(this.pythonPaths, this.workDirs)
+    this.pip = new PipInstaller(this.pythonPaths, this.workDirs)
     this.installers = [this.poetry, this.pipenv, this.pip]
     this.installedPackages = []
   }

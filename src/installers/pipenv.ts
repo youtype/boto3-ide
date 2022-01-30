@@ -32,6 +32,6 @@ export default class PipenvInstaller extends BaseInstaller {
   }
 
   isPresent(): boolean {
-    return this.lockFileExists()
+    return this.getLockFilePath() ? true : false
   }
 }

@@ -56,9 +56,9 @@ export async function getServicePackages(
   return [masterPackage, ...servicePackages]
 }
 
-export function getWorkDir(): string {
+export function getWorkDirs(): string[] {
   if (workspace.workspaceFolders?.length) {
-    return workspace.workspaceFolders[0].uri.fsPath
+    return [...workspace.workspaceFolders.map((i) => i.uri.fsPath), process.cwd()]
   }
-  return process.cwd()
+  return [process.cwd()]
 }

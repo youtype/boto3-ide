@@ -96,7 +96,7 @@
 		"mocha": "^9.1.3",
 		"prettier": "^2.4.1",
 		"typescript": "^4.4.4",
-		"vsce": "^2.3.0"
+		"vsce": "^2.6.5"
 	},
 	"dependencies": {
 		"ignore": "^5.1.9"

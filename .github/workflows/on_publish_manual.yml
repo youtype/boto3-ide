@@ -18,9 +18,9 @@ jobs:
         id: install
         run: |
           npm install -g npm
-          npm ci
+          npm i
       - name: Publish to Marketplace
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: |
-          vsce publish
+          npx vsce publish

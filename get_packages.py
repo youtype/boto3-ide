@@ -68,10 +68,10 @@ def main() -> None:
     packages.sort(key=lambda x: x.downloads, reverse=True)
 
     with open(output_path, 'w') as f:
-        f.write('import { ServicePackage } from "./servicePackage";\n\n')
+        f.write("import { ServicePackage } from './servicePackage'\n\n")
         f.write("export const servicePackages: ServicePackage[] = [\n")
         for package in packages:
-            f.write(f"    {package.print()}\n")
+            f.write(f"  {package.print()}\n")
         f.write("];\n")
 
 if __name__ == "__main__":

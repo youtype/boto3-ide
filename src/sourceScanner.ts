@@ -27,9 +27,17 @@ export default class SourceScanner {
 
       for (const file of files) {
         const relativePath = path.relative(workDir, file.fsPath)
-        if (filters.length && gitignore.test(relativePath).ignored) {
-          console.log(`File ${relativePath} is gitignored`)
-          continue
+        if (filters.length) {
+          try {
+            const ignored = gitignore.test(relativePath).ignored
+            if (ignored) {
+              console.log(`File ${relativePath} is gitignored`)
+              continue
+            }
+          } catch (e) {
+            console.log(`File ${relativePath} is not relative to ${workDir}: ${e}`)
+            continue
+          }
         }
         console.log(`Discovered ${relativePath}`)
         result.push(file.fsPath)

@@ -4,6 +4,18 @@ All notable changes to the `boto3-ide` extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.5.0]
+### Added
+- Support for multiple directories in a workspace'
+- Update supported `boto3` services list, now includes 299 services
+
+### Changed
+- `poetry`/`pipenv` can discover lock files from any workspace directory. The first directory with a lockfile is used as a `cwd`
+- All workspace directories are scanned to discover `boto3` services in-use
+
+### Fixed
+- Error on gitignored files outside of a project root
+
 ## [0.4.2]
 ### Fixed
 - Auto-discover respects `.gitignore`

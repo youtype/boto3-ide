@@ -1,0 +1,26 @@
+name: Publish to NPM
+"on":
+  workflow_dispatch: {}
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Node
+        id: setup-node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          registry-url: https://registry.npmjs.org/
+      - name: Checkout main branch
+        id: checkout
+        uses: actions/checkout@v2
+      - name: Install package
+        id: install
+        run: |
+          npm install -g npm
+          npm ci
+      - name: Publish to Marketplace
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: |
+          vsce publish

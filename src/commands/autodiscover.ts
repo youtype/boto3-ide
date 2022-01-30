@@ -11,7 +11,9 @@ export default async function handle(context: ExtensionContext): Promise<void> {
     return
   }
 
-  const sourceScanner = new SourceScanner(getWorkDirs())
+  const workDirs = getWorkDirs()
+  const sourceDirs = workDirs.slice(0, -1)
+  const sourceScanner = new SourceScanner(sourceDirs)
 
   let servicePackages: PypiPackage[] = []
   await showProgress('Scanning workspace...', async (progress) => {

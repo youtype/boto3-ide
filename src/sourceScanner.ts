@@ -17,7 +17,7 @@ export default class SourceScanner {
     const files = await workspace.findFiles('**/*.py', `{${exclude}}`)
     const result: string[] = []
 
-    await this.workDirs.forEach(async (workDir) => {
+    for (const workDir of this.workDirs) {
       const gitignorePath = path.join(workDir, '.gitignore')
       const gitignoreExists = fs.existsSync(gitignorePath)
       const filters = gitignoreExists ? (await this.readFile(gitignorePath)).split(/\r?\n/) : []
@@ -42,7 +42,8 @@ export default class SourceScanner {
         console.log(`Discovered ${relativePath}`)
         result.push(file.fsPath)
       }
-    })
+    }
+    console.log(`Discovered ${result.length} files`)
     return result
   }
 

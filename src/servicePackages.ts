@@ -321,3 +321,8 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-workspaces-web', 'WorkSpacesWeb', 1422),
   new ServicePackage('mypy-boto3-iottwinmaker', 'IoTTwinMaker', 1414)
 ]
+
+// const downloadsSum = servicePackages
+//   .map((x) => x.downloads)
+//   .reduce((partialSum, a) => partialSum + a, 0)
+// console.log(downloadsSum)

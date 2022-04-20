@@ -8,26 +8,18 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 14
+          - 16
     steps:
       - name: Checkout current branch
         id: checkout
-        uses: actions/checkout@v2
-      - name: Cache npm downloads
-        uses: actions/cache@v2
-        id: cache
-        if: steps.scripts.outputs.result
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-${{ matrix.node-version }}-
+        uses: actions/checkout@v3
       - name: Set up Node
         id: setup-node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           registry-url: https://registry.npmjs.org/
+          cache: npm
       - name: Install package
         id: install
         run: |

@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get Release
-        uses: actions/github-script@v3
+        uses: actions/github-script@v6
         id: release
         with:
           script: |
@@ -51,13 +51,13 @@ jobs:
             return true;
       - name: Set up Node
         id: setup-node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 16
           registry-url: https://registry.npmjs.org/
       - name: Checkout Release target branch
         id: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: ${{ steps.release.outputs.target }}
       - name: Get new version

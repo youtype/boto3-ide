@@ -6,7 +6,7 @@ Supports [pip](https://pypi.org/project/pip/), [poetry](https://python-poetry.or
 
 Add type checking for all `boto3` services with [pyright](https://github.com/microsoft/pyright) and [mypy](http://mypy-lang.org/).
 
-![boto3.typed](https://raw.githubusercontent.com/vemel/mypy_boto3_builder/master/logo.png)
+![boto3.typed](https://raw.githubusercontent.com/youtype/mypy_boto3_builder/main/logo.png)
 
 - [AWS boto3](#aws-boto3)
   - [TLDR](#tldr)

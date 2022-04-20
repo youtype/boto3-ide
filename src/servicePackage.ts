@@ -42,6 +42,6 @@ export class ServicePackage implements PypiPackage {
   }
   getDocsURL(): string {
     const linkName = this.moduleName.replace(/-/g, '_')
-    return `https://vemel.github.io/boto3_stubs_docs/${linkName}/`
+    return `https://youtype.github.io/boto3_stubs_docs/${linkName}/`
   }
 }

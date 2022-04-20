@@ -52,7 +52,7 @@ export class Boto3StubsPackage implements PypiPackage {
     return ''
   }
   getDocsURL(): string {
-    return 'https://vemel.github.io/boto3_stubs_docs/'
+    return 'https://youtype.github.io/boto3_stubs_docs/'
   }
 }
 

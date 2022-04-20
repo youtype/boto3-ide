@@ -4,6 +4,11 @@ All notable changes to the `boto3-ide` extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.5.1]
+### Fixed
+- Updated packages to the latest version
+- Updated dependencies
+
 ## [0.5.0]
 ### Added
 - Support for multiple directories in a workspace'

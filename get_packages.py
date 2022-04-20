@@ -6,11 +6,11 @@ import json
 import time
 import sys
 from typing import Iterator
+from pathlib import Path
 
-DOCS_URL = 'https://vemel.github.io/boto3_stubs_docs/'
+DOCS_URL = 'https://youtype.github.io/boto3_stubs_docs/'
 JSON_URL = 'https://pypi.org/pypi/{}/json'
 PREFIX = 'mypy-boto3-'
-AUTHOR = "Vlad Emelianov"
 
 @dataclass
 class Package:
@@ -31,7 +31,7 @@ class Package:
 def iterate_packages() -> Iterator[Package]:
     r = requests.get(DOCS_URL)
     soup = BeautifulSoup(r.text, 'html.parser')
-    for snippet in soup.select('a[href*="./mypy_boto3_"]'):
+    for snippet in soup.select('a[href^="mypy_boto3_"]'):
         if not snippet.parent:
             continue
         docs_link = snippet.parent.select_one('a[href*="https://boto3."]')
@@ -39,6 +39,8 @@ def iterate_packages() -> Iterator[Package]:
             continue
 
         name: str = snippet.text
+        if not name.startswith(PREFIX):
+            continue
         description: str = docs_link.text
         yield Package(name=name, description=description)
 
@@ -56,8 +58,8 @@ def get_downloads(name: str) -> int:
     return json.loads(data)["data"]["last_month"]
 
 def main() -> None:
-    output_path = sys.argv[1]
-    print(f"Writing to {output_path}...")
+    output_path = Path(__file__).parent / "src" / "servicePackages.ts"
+    print(f"Writing to {output_path.as_posix()}...")
     packages = []
     for counter, package in enumerate(iterate_packages()):
         package.downloads = get_downloads(package.name)
@@ -67,7 +69,7 @@ def main() -> None:
     # packages.sort(key=lambda x: x.name)
     packages.sort(key=lambda x: x.downloads, reverse=True)
 
-    with open(output_path, 'w') as f:
+    with output_path.open('w') as f:
         f.write("import { ServicePackage } from './servicePackage'\n\n")
         f.write("export const servicePackages: ServicePackage[] = [\n")
         for package in packages:

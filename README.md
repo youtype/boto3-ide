@@ -1,6 +1,5 @@
 # AWS boto3
 
-
 [VSCode](https://code.visualstudio.com/) extension to enable IntelliSense and type checking for all [boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html) services.
 
 Supports [pip](https://pypi.org/project/pip/), [poetry](https://python-poetry.org/) and [pipenv](https://pypi.org/project/pipenv/) installers.
@@ -25,7 +24,6 @@ Add type checking for all `boto3` services with [pyright](https://github.com/mic
 ## TLDR
 
 Install the extension and run `AWS boto3: Quick Start`.
-
 
 ### Quick Start
 
@@ -77,4 +75,4 @@ I am working on it.
 
 ## Release Notes
 
-FUll release notes can be found in [CHANGELOG](./CHANGELOG.md).
+Full release notes can be found in [CHANGELOG](./CHANGELOG.md).

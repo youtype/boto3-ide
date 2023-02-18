@@ -61,7 +61,7 @@ def get_downloads(name: str) -> int:
 def main() -> None:
     output_path = Path(__file__).parent / "src" / "servicePackages.ts"
     print(f"Writing to {output_path.as_posix()}...")
-    packages = []
+    packages: list[Package] = []
     for counter, package in enumerate(iterate_packages()):
         package.downloads = get_downloads(package.name)
         packages.append(package)

@@ -4,6 +4,10 @@ All notable changes to the `boto3-ide` extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.5.3]
+### Fixed
+- Fix outdated `activationEvents`
+
 ## [0.5.2]
 ### Fixed
 - Updated packages to the latest version

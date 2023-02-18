@@ -1,3 +1,5 @@
+# pip install requests bs4 pypistats
+
 import requests
 from bs4 import BeautifulSoup
 import pypistats
@@ -54,7 +56,6 @@ def get_downloads(name: str) -> int:
         except Exception as e:
             sys.stderr.write(f"Retrying {name} in 10s: {e}")
             time.sleep(10)
-            pass
     return json.loads(data)["data"]["last_month"]
 
 def main() -> None:

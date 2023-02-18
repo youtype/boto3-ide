@@ -31,15 +31,8 @@
 		"botocore",
 		"type checking",
 		"intellisense",
+		"code completion",
 		"pylance"
-	],
-	"activationEvents": [
-		"onCommand:boto3-ide.quickstart",
-		"onCommand:boto3-ide.modify",
-		"onCommand:boto3-ide.update",
-		"onCommand:boto3-ide.docs",
-		"onCommand:boto3-ide.autodiscover",
-		"onCommand:boto3-ide.installer"
 	],
 	"main": "./out/extension.js",
 	"contributes": {

@@ -1,4 +1,4 @@
-# pip install requests bs4 pypistats
+# pip install -r requirements.txt
 
 import requests
 from bs4 import BeautifulSoup
@@ -9,10 +9,12 @@ import time
 import sys
 from typing import Iterator
 from pathlib import Path
+import httpx
 
 DOCS_URL = 'https://youtype.github.io/boto3_stubs_docs/'
 JSON_URL = 'https://pypi.org/pypi/{}/json'
 PREFIX = 'mypy-boto3-'
+
 
 @dataclass
 class Package:
@@ -28,7 +30,11 @@ class Package:
         return self.description.split("boto3.")[-1].split()[0]
 
     def print(self) -> str:
-        return f"new ServicePackage('{self.name}', '{self.service_name}', {self.downloads}),"
+        return (
+            f"new ServicePackage('{self.name}'"
+            f", '{self.service_name}', {self.downloads}),"
+        )
+
 
 def iterate_packages() -> Iterator[Package]:
     r = requests.get(DOCS_URL)
@@ -49,14 +55,20 @@ def iterate_packages() -> Iterator[Package]:
 
 def get_downloads(name: str) -> int:
     data = '{"data": {"last_month": 0}}'
+
     while True:
         try:
             data = pypistats.recent(name, "month", format="json")
             break
-        except Exception as e:
+        except httpx.HTTPStatusError as e:
+            if e.response.status_code == 404:
+                print(f"Failed to get downloads for {name}: {e}")
+                return 0
+
             sys.stderr.write(f"Retrying {name} in 10s: {e}")
             time.sleep(10)
     return json.loads(data)["data"]["last_month"]
+
 
 def main() -> None:
     output_path = Path(__file__).parent / "src" / "servicePackages.ts"
@@ -65,10 +77,14 @@ def main() -> None:
     for counter, package in enumerate(iterate_packages()):
         package.downloads = get_downloads(package.name)
         packages.append(package)
-        print(f"Processed {counter}: {package.name} - {package.downloads} downloads")
+        print(
+            f"Processed {counter}: {package.name}"
+            f" - {package.downloads} downloads"
+        )
 
     # packages.sort(key=lambda x: x.name)
     packages.sort(key=lambda x: x.downloads, reverse=True)
+    print(sum([i.downloads for i in packages]))
 
     with output_path.open('w') as f:
         f.write("import { ServicePackage } from './servicePackage'\n\n")
@@ -76,6 +92,7 @@ def main() -> None:
         for package in packages:
             f.write(f"  {package.print()}\n")
         f.write("];\n")
+
 
 if __name__ == "__main__":
     main()

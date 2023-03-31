@@ -62,7 +62,11 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-cloudtrail', 'CloudTrail', 20314),
   new ServicePackage('mypy-boto3-acm', 'ACM', 19760),
   new ServicePackage('mypy-boto3-ebs', 'EBS', 19641),
-  new ServicePackage('mypy-boto3-sagemaker-featurestore-runtime', 'SageMakerFeatureStoreRuntime', 19121),
+  new ServicePackage(
+    'mypy-boto3-sagemaker-featurestore-runtime',
+    'SageMakerFeatureStoreRuntime',
+    19121
+  ),
   new ServicePackage('mypy-boto3-dlm', 'DLM', 18808),
   new ServicePackage('mypy-boto3-config', 'ConfigService', 18759),
   new ServicePackage('mypy-boto3-iot', 'IoT', 17970),
@@ -216,7 +220,11 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-forecastquery', 'ForecastQueryService', 9194),
   new ServicePackage('mypy-boto3-worklink', 'WorkLink', 9192),
   new ServicePackage('mypy-boto3-kinesisanalyticsv2', 'KinesisAnalyticsV2', 9191),
-  new ServicePackage('mypy-boto3-marketplacecommerceanalytics', 'MarketplaceCommerceAnalytics', 9191),
+  new ServicePackage(
+    'mypy-boto3-marketplacecommerceanalytics',
+    'MarketplaceCommerceAnalytics',
+    9191
+  ),
   new ServicePackage('mypy-boto3-opsworkscm', 'OpsWorksCM', 9190),
   new ServicePackage('mypy-boto3-iotevents', 'IoTEvents', 9189),
   new ServicePackage('mypy-boto3-iot1click-projects', 'IoT1ClickProjects', 9188),
@@ -279,7 +287,11 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-proton', 'Proton', 7383),
   new ServicePackage('mypy-boto3-account', 'Account', 7335),
   new ServicePackage('mypy-boto3-scheduler', 'EventBridgeScheduler', 7262),
-  new ServicePackage('mypy-boto3-route53-recovery-control-config', 'Route53RecoveryControlConfig', 7167),
+  new ServicePackage(
+    'mypy-boto3-route53-recovery-control-config',
+    'Route53RecoveryControlConfig',
+    7167
+  ),
   new ServicePackage('mypy-boto3-route53-recovery-cluster', 'Route53RecoveryCluster', 7159),
   new ServicePackage('mypy-boto3-memorydb', 'MemoryDB', 7150),
   new ServicePackage('mypy-boto3-route53-recovery-readiness', 'Route53RecoveryReadiness', 7142),
@@ -288,7 +300,11 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-opensearchserverless', 'OpenSearchServiceServerless', 7104),
   new ServicePackage('mypy-boto3-snow-device-management', 'SnowDeviceManagement', 7053),
   new ServicePackage('mypy-boto3-chime-sdk-meetings', 'ChimeSDKMeetings', 6966),
-  new ServicePackage('mypy-boto3-migrationhubstrategy', 'MigrationHubStrategyRecommendations', 6903),
+  new ServicePackage(
+    'mypy-boto3-migrationhubstrategy',
+    'MigrationHubStrategyRecommendations',
+    6903
+  ),
   new ServicePackage('mypy-boto3-iottwinmaker', 'IoTTwinMaker', 6844),
   new ServicePackage('mypy-boto3-evidently', 'CloudWatchEvidently', 6795),
   new ServicePackage('mypy-boto3-kafkaconnect', 'KafkaConnect', 6795),
@@ -297,7 +313,11 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-resiliencehub', 'ResilienceHub', 6748),
   new ServicePackage('mypy-boto3-panorama', 'Panorama', 6719),
   new ServicePackage('mypy-boto3-inspector2', 'Inspector2', 6687),
-  new ServicePackage('mypy-boto3-migration-hub-refactor-spaces', 'MigrationHubRefactorSpaces', 6682),
+  new ServicePackage(
+    'mypy-boto3-migration-hub-refactor-spaces',
+    'MigrationHubRefactorSpaces',
+    6682
+  ),
   new ServicePackage('mypy-boto3-rum', 'CloudWatchRUM', 6657),
   new ServicePackage('mypy-boto3-amplifyuibuilder', 'AmplifyUIBuilder', 6648),
   new ServicePackage('mypy-boto3-backup-gateway', 'BackupGateway', 6638),
@@ -324,7 +344,11 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-backupstorage', 'BackupStorage', 6108),
   new ServicePackage('mypy-boto3-privatenetworks', 'Private5G', 6102),
   new ServicePackage('mypy-boto3-controltower', 'ControlTower', 6095),
-  new ServicePackage('mypy-boto3-license-manager-user-subscriptions', 'LicenseManagerUserSubscriptions', 6089),
+  new ServicePackage(
+    'mypy-boto3-license-manager-user-subscriptions',
+    'LicenseManagerUserSubscriptions',
+    6089
+  ),
   new ServicePackage('mypy-boto3-rolesanywhere', 'IAMRolesAnywhere', 6088),
   new ServicePackage('mypy-boto3-migrationhuborchestrator', 'MigrationHubOrchestrator', 6081),
   new ServicePackage('mypy-boto3-support-app', 'SupportApp', 6077),
@@ -338,10 +362,14 @@ export const servicePackages: ServicePackage[] = [
   new ServicePackage('mypy-boto3-sagemaker-metrics', 'SageMakerMetrics', 6020),
   new ServicePackage('mypy-boto3-kinesis-video-webrtc-storage', 'KinesisVideoWebRTCStorage', 5972),
   new ServicePackage('mypy-boto3-kendra-ranking', 'KendraRanking', 5944),
-  new ServicePackage('mypy-boto3-license-manager-linux-subscriptions', 'LicenseManagerLinuxSubscriptions', 5943),
+  new ServicePackage(
+    'mypy-boto3-license-manager-linux-subscriptions',
+    'LicenseManagerLinuxSubscriptions',
+    5943
+  ),
   new ServicePackage('mypy-boto3-cloudtrail-data', 'CloudTrailDataService', 3549),
   new ServicePackage('mypy-boto3-tnb', 'TelcoNetworkBuilder', 2947),
   new ServicePackage('mypy-boto3-internetmonitor', 'CloudWatchInternetMonitor', 2901),
   new ServicePackage('mypy-boto3-ivs-realtime', 'ivsrealtime', 249),
-  new ServicePackage('mypy-boto3-vpc-lattice', 'VPCLattice', 0),
-];
+  new ServicePackage('mypy-boto3-vpc-lattice', 'VPCLattice', 0)
+]

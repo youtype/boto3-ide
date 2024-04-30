@@ -8,7 +8,10 @@ export class InstallerItem implements QuickPickItem {
   detail: string
   picked: boolean
 
-  constructor(public installer: BaseInstaller, picked: boolean) {
+  constructor(
+    public installer: BaseInstaller,
+    picked: boolean
+  ) {
     this.label = installer.name
     this.detail = installer.description
     this.description = `${installer.getWorkDir()} ${picked ? '(selected)' : ''}`
@@ -22,7 +25,10 @@ export class PypiPackageItem implements QuickPickItem {
   detail: string
   picked: boolean
 
-  constructor(public pypiPackage: PypiPackage, picked: boolean) {
+  constructor(
+    public pypiPackage: PypiPackage,
+    picked: boolean
+  ) {
     this.label = pypiPackage.getLabel().trim()
     this.description = pypiPackage.getDescription().trim()
     this.detail = pypiPackage.getDetail().trim()

@@ -10,7 +10,7 @@
   "typescript.tsc.autoDetect": "off",
   "editor.tabSize": 2,
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
   "editor.formatOnSave": true
 }

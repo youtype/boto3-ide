@@ -1,29 +1,24 @@
 name: Run style checks and unit tests
-"on":
+'on':
   push: {}
   workflow_dispatch: {}
 jobs:
   check:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version:
-          - 16
     steps:
       - name: Checkout current branch
         id: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set up Node
         id: setup-node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 20
           registry-url: https://registry.npmjs.org/
           cache: npm
       - name: Install package
         id: install
         run: |
-          npm install -g npm
           npm ci
       - name: Run linting
         id: lint

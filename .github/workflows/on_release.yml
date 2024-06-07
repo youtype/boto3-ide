@@ -1,5 +1,5 @@
 name: Release new version
-"on":
+'on':
   release:
     types:
       - published
@@ -21,7 +21,7 @@ jobs:
             if (context.payload.inputs && context.payload.inputs.tag) {
               const tagName = context.payload.inputs.tag;
               // find Pull Request by number fom input
-              const releasesResponse = await github.repos.listReleases({
+              const releasesResponse = await github.rest.repos.listReleases({
                 owner: context.repo.owner,
                 repo: context.repo.repo
               });

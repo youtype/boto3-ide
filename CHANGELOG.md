@@ -4,6 +4,10 @@ All notable changes to the `boto3-ide` extension will be documented in this file
 
 ## [Unreleased]
 
+## [0.6.0]
+- Update packages to the latest version
+- Use `node20` runtime
+
 ## [0.5.4]
 Updated package data
 
